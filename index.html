@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/assets/tws-favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TWS Gifts - Personalized &amp; Corporate Gifting</title>
+    <meta
+      name="description"
+      content="TWS Gifts – Personalized &amp; Corporate Gifting. Thoughtful Wishes. Meaningful Moments. Custom branded gifts, apparel, bags, engraved keepsakes and more."
+    />
+    <meta name="theme-color" content="#FFF8EC" />
+
+    <!-- Google Fonts: Fraunces (Headings/Prices) and DM Sans (UI/Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Prevent theme flash before hydration -->
+    <script>
+      (function () {
+        try {
+          var persistedTheme = null;
+          var persistData = localStorage.getItem('persist:theme');
+          if (persistData) {
+            var parsed = JSON.parse(persistData);
+            if (parsed && parsed.mode) {
+              persistedTheme = JSON.parse(parsed.mode);
+            }
+          }
+          if (!persistedTheme) {
+            persistedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', persistedTheme);
+          document.documentElement.classList.add(persistedTheme);
+          if (persistedTheme === 'dark') {
+            document.documentElement.style.backgroundColor = '#1C1210';
+          } else {
+            document.documentElement.style.backgroundColor = '#FFF8EC';
+          }
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
