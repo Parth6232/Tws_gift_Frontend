@@ -1,8 +1,15 @@
+export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+// Strip trailing slashes and ensure /api endpoint prefix for backend routes
+const normalizedBase = API_URL.trim().replace(/\/+$/, '');
+const apiBaseURL = normalizedBase.endsWith('/api') ? normalizedBase : `${normalizedBase}/api`;
+
 export const appConstants = {
   appName: 'TWS Gifts',
   tagline: 'Thoughtful Wishes. Meaningful Moments.',
   subTagline: 'Personalized & Corporate Gifting.',
-  apiBaseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api',
+  apiUrl: API_URL,
+  apiBaseURL,
   whatsappNumber: import.meta.env.VITE_WHATSAPP_NUMBER || '919876543210',
   contactEmail: 'hello@twsgifts.com',
 
