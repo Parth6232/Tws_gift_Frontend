@@ -3,9 +3,11 @@ import { Box, Typography, Container, useTheme, Paper } from '@mui/material';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import NavigationRoundedIcon from '@mui/icons-material/NavigationRounded';
 import SectionHeading from '../common/SectionHeading';
 import Button from '../common/Button';
 import PageTransition from '../common/PageTransition';
+import CorporateBulkCta from '../common/CorporateBulkCta';
 import { appConstants } from '../constant/appConstants';
 
 export default function ContactPage() {
@@ -19,7 +21,7 @@ export default function ContactPage() {
           <SectionHeading
             eyebrow="We’d Love to Help"
             title="Get in Touch"
-            description="Have questions about photo resolutions, custom sizes, corporate gifting, or rush orders? We are just a message away."
+            description="Have questions about orders, custom designs, corporate gifting, or bulk inquiries? We are just a message away."
           />
 
           <Box
@@ -27,7 +29,7 @@ export default function ContactPage() {
               display: 'grid',
               gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' },
               gap: 3,
-              mb: 6,
+              mb: 4,
             }}
           >
             {/* WhatsApp */}
@@ -62,8 +64,11 @@ export default function ContactPage() {
               <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 0.5 }}>
                 WhatsApp Direct
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Instant response from our artisans
+              <Typography variant="caption" sx={{ color: theme.palette.primary.main, fontWeight: 700, mb: 1 }}>
+                {appConstants.phoneDisplay}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5, lineHeight: 1.5, fontSize: '0.85rem' }}>
+                Chat with our team for orders, custom designs and bulk gifting
               </Typography>
               <Button
                 component="a"
@@ -72,7 +77,7 @@ export default function ContactPage() {
                 rel="noopener noreferrer"
                 size="small"
                 variant="white"
-                sx={{ mt: 'auto', color: '#25D366' }}
+                sx={{ mt: 'auto', color: '#25D366', width: '100%' }}
               >
                 Chat Now
               </Button>
@@ -110,21 +115,27 @@ export default function ContactPage() {
               <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 0.5 }}>
                 Email Support
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              <Typography
+                variant="caption"
+                sx={{ color: theme.palette.primary.main, fontWeight: 700, mb: 1, wordBreak: 'break-all' }}
+              >
                 {appConstants.contactEmail}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5, lineHeight: 1.5, fontSize: '0.85rem' }}>
+                Write to us with your requirements or questions
               </Typography>
               <Button
                 component="a"
                 href={`mailto:${appConstants.contactEmail}`}
                 size="small"
                 variant="white"
-                sx={{ mt: 'auto' }}
+                sx={{ mt: 'auto', width: '100%' }}
               >
                 Send Email
               </Button>
             </Paper>
 
-            {/* Studio Workshop */}
+            {/* Based in Indore */}
             <Paper
               elevation={0}
               sx={{
@@ -154,16 +165,35 @@ export default function ContactPage() {
                 <LocationOnOutlinedIcon sx={{ fontSize: 28 }} />
               </Box>
               <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 0.5 }}>
-                Studio Workshop
+                Based in Indore
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Artisan Lane, New Delhi, India
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2, lineHeight: 1.5, fontSize: '0.825rem' }}>
+                {appConstants.fullAddress}
               </Typography>
-              <Typography variant="caption" sx={{ color: theme.palette.primary.main, fontWeight: 600, mt: 'auto' }}>
-                Mon – Sat, 10 AM – 7 PM
-              </Typography>
+              {appConstants.businessHours && (
+                <Typography variant="caption" sx={{ color: theme.palette.primary.main, fontWeight: 600, mb: 1.5 }}>
+                  {appConstants.businessHours}
+                </Typography>
+              )}
+              {appConstants.mapsUrl && (
+                <Button
+                  component="a"
+                  href={appConstants.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="small"
+                  variant="white"
+                  icon={<NavigationRoundedIcon sx={{ fontSize: 16 }} />}
+                  sx={{ mt: 'auto', width: '100%', color: '#C9A24B' }}
+                >
+                  Get Directions
+                </Button>
+              )}
             </Paper>
           </Box>
+
+          {/* Corporate & Bulk CTA */}
+          <CorporateBulkCta sx={{ mt: 5 }} />
         </Container>
       </Box>
     </PageTransition>

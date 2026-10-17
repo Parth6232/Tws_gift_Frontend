@@ -1,6 +1,6 @@
 # TWS Gifts — Frontend
 
-> **"Thoughtful Wishes. Meaningful Moments."**
+> **"Thoughtful Wishes. Special Moments."**
 > A premium personalized & corporate gifting storefront, conversational gifting assistant, and administrative control center built with **React 19 + Vite (JavaScript)**.
 
 ---
@@ -8,12 +8,12 @@
 ## 🎁 Features Overview
 
 ### 1. Public Storefront
-- **Sticky Navbar:** Customized brand lockup ("Dear" in chocolate `#4A2118` + "Keeps" in rose `#D9456B`), Categories mega-menu, live debounced search overlay, Wishlist counter, Cart drawer trigger, and animated light/dark Theme Switch.
-- **Hero Section:** GSAP entrance animation, headline reveal, primary and WhatsApp CTA buttons, 15,000+ trust indicators, and 3D gift-box keepsake showcase.
+- **Sticky Navbar:** Customized brand lockup, Categories mega-menu, live debounced search overlay, Wishlist counter, Cart drawer trigger, and animated light/dark Theme Switch.
+- **Hero Section:** GSAP entrance animation, headline reveal, primary and WhatsApp CTA buttons, truthful value highlights, and gift showcase.
 - **Category Strip:** Horizontal snap-scrolling categories populated dynamically from `/categories`.
 - **Product Shelves:** Best Sellers shelf (`bestSeller=true`), New Arrivals (`newArrival=true`), and luxury dark-band Premium Collection (`premium=true`).
 - **How Personalization Works:** 3-step intuitive guide showing customers how easy customization is.
-- **Why TWS Gifts & Testimonials:** 4 promise pillars (free shipping > ₹999, 100% custom crafted, ribbon packaging, direct WhatsApp support) and heartfelt customer reviews with star ratings.
+- **Why TWS Gifts:** 4 promise pillars (free shipping > ₹999, personalization available, gift-ready packaging, direct WhatsApp support).
 - **Themed Components Sheet:** Interactive design-system showcase demonstrating all variants of Button, Textfield, Dropdown, Badges, PriceTags, and InfoAlerts.
 - **Shop Page (`/shop` & `/shop/:categorySlug`):** Dynamic category filter checkboxes, price range slider (₹0 - ₹10,000), collection toggles (Best Seller, New, Premium), sorting, search, and mobile bottom filter sheet.
 - **Product Details (`/product/:slug`):** Multi-thumbnail image gallery with hover zoom, discount tags, sold-out state, quantity stepper, "Add to Bag", single-product "Order on WhatsApp", and mobile sticky checkout bar.
@@ -157,8 +157,8 @@ npm install
 ### 2. Configure Environment Variables
 Create `.env` file in `Frontend/`:
 ```env
-VITE_API_BASE_URL=http://localhost:5000/api
-VITE_WHATSAPP_NUMBER=919876543210
+VITE_API_URL=http://localhost:5000
+VITE_WHATSAPP_NUMBER=918109101811
 ```
 
 ### 3. Run Development Server

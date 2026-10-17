@@ -15,11 +15,9 @@ export default function Hero() {
   const subheadRef = useRef(null);
   const ctaRef = useRef(null);
   const imageRef = useRef(null);
-  const floatingHeartsRef = useRef([]);
   const isDark = theme.palette.mode === 'dark';
 
   useEffect(() => {
-    // Check prefers-reduced-motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
@@ -62,7 +60,7 @@ export default function Hero() {
 
       // Subtle float animation for hero image
       gsap.to(imageRef.current, {
-        y: -12,
+        y: -10,
         duration: 3,
         repeat: -1,
         yoyo: true,
@@ -122,7 +120,7 @@ export default function Hero() {
                   textTransform: 'uppercase',
                 }}
               >
-                Thoughtful Wishes. Meaningful Moments.
+                {appConstants.tagline}
               </Typography>
             </Box>
 
@@ -140,14 +138,14 @@ export default function Hero() {
                 mb: 2.5,
               }}
             >
-              Because the best gifts carry a{' '}
+              One Gift. Two Smiles.{' '}
               <span
                 style={{
                   color: isDark ? '#F2758F' : '#D9456B',
                   fontStyle: 'italic',
                 }}
               >
-                piece of your heart.
+                One Bigger Purpose.
               </span>
             </Typography>
 
@@ -163,8 +161,8 @@ export default function Hero() {
                 mb: 4,
               }}
             >
-              Handcrafted customized photo frames, engraved keepsakes, glowing anniversary lamps,
-              and thoughtful memories wrapped in our signature ribbon box.
+              Personalized gifts, corporate &amp; bulk gifting, branded apparel, bags and handicraft pieces,
+              gift-wrapped with care. Every order also gifts a stationery kit to a child in need.
             </Typography>
 
             {/* CTA Buttons */}
@@ -213,7 +211,7 @@ export default function Hero() {
               </Button>
             </Box>
 
-            {/* Trust Counters */}
+            {/* Truthful Highlights */}
             <Box
               sx={{
                 display: 'flex',
@@ -228,14 +226,14 @@ export default function Hero() {
                   sx={{
                     fontFamily: '"Fraunces", serif',
                     fontWeight: 700,
-                    fontSize: '1.5rem',
+                    fontSize: '1.4rem',
                     color: theme.palette.text.primary,
                   }}
                 >
-                  15,000+
+                  1 Gift = 1 Kit
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  Smiles Delivered
+                  Stationery kit donated
                 </Typography>
               </Box>
 
@@ -244,14 +242,14 @@ export default function Hero() {
                   sx={{
                     fontFamily: '"Fraunces", serif',
                     fontWeight: 700,
-                    fontSize: '1.5rem',
+                    fontSize: '1.4rem',
                     color: theme.palette.text.primary,
                   }}
                 >
-                  4.9 / 5
+                  ₹999+
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  Customer Love ★
+                  Free shipping
                 </Typography>
               </Box>
 
@@ -260,20 +258,20 @@ export default function Hero() {
                   sx={{
                     fontFamily: '"Fraunces", serif',
                     fontWeight: 700,
-                    fontSize: '1.5rem',
+                    fontSize: '1.4rem',
                     color: theme.palette.text.primary,
                   }}
                 >
-                  100%
+                  Bulk
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  Custom Crafted
+                  Corporate orders welcome
                 </Typography>
               </Box>
             </Box>
           </Box>
 
-          {/* Right Visual Image Column */}
+          {/* Right Visual Column */}
           <Box
             sx={{
               display: 'flex',
@@ -295,7 +293,7 @@ export default function Hero() {
               }}
             />
 
-            {/* 3D Gift Box Logo Showcase */}
+            {/* Logo Showcase */}
             <Box
               ref={imageRef}
               sx={{
@@ -315,27 +313,28 @@ export default function Hero() {
                 alignItems: 'center',
               }}
             >
-              <Box sx={isDark ? { backgroundColor: '#FFF8EC', borderRadius: '16px', padding: '12px', width: '100%', display: 'flex', justifyContent: 'center' } : { width: '100%' }}>
+              <Box sx={isDark ? { backgroundColor: '#FFF8EC', borderRadius: '16px', padding: '16px', width: '100%', display: 'flex', justifyContent: 'center' } : { width: '100%', padding: '8px', display: 'flex', justifyContent: 'center' }}>
                 <img
-                  src="/assets/tws-logo-full.png"
+                  src="/assets/tws-logo-no-tagline.png"
                   alt="TWS Gifts"
                   style={{
                     width: '100%',
+                    maxWidth: 320,
                     height: 'auto',
                     borderRadius: '12px',
                     objectFit: 'contain',
-                    maxHeight: 280,
+                    maxHeight: 260,
                   }}
                 />
               </Box>
 
-              {/* Floating Gift Tag Badge */}
+              {/* Floating Chip */}
               <Box
                 sx={{
                   position: 'absolute',
                   bottom: -16,
                   px: 3,
-                  py: 1.25,
+                  py: 1,
                   borderRadius: '999px',
                   backgroundColor: isDark ? '#3D251F' : '#FFFFFF',
                   border: `1.5px solid ${theme.palette.primary.main}`,
@@ -345,7 +344,6 @@ export default function Hero() {
                   gap: 1,
                 }}
               >
-                <span style={{ fontSize: '18px' }}>💌</span>
                 <Typography
                   sx={{
                     fontFamily: '"Fraunces", serif',
@@ -354,7 +352,7 @@ export default function Hero() {
                     color: theme.palette.primary.main,
                   }}
                 >
-                  Pure Handmade Keepsakes
+                  Gift with Purpose 💛
                 </Typography>
               </Box>
             </Box>

@@ -4,14 +4,25 @@ export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const normalizedBase = API_URL.trim().replace(/\/+$/, '');
 const apiBaseURL = normalizedBase.endsWith('/api') ? normalizedBase : `${normalizedBase}/api`;
 
+const fullAddress = 'Parvati Bhawan, Sector A2, Scheme 136, Vijay Nagar, Indore, Madhya Pradesh 452010';
+const instagramHandle = ''; // Not confirmed yet. If set later, e.g. 'indore_gaddha_free'
+
 export const appConstants = {
   appName: 'TWS Gifts',
-  tagline: 'Thoughtful Wishes. Meaningful Moments.',
+  tagline: 'Thoughtful Wishes. Special Moments.',
   subTagline: 'Personalized & Corporate Gifting.',
   apiUrl: API_URL,
   apiBaseURL,
-  whatsappNumber: import.meta.env.VITE_WHATSAPP_NUMBER || '919876543210',
-  contactEmail: 'hello@twsgifts.com',
+  whatsappNumber: import.meta.env.VITE_WHATSAPP_NUMBER || '918109101811',
+  phoneDisplay: '+91 81091 01811',
+  contactEmail: 'twsgiftsqcs@gmail.com',
+  locationText: 'Indore, Madhya Pradesh, India',
+  fullAddress,
+  mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`,
+  businessHours: '', // owner will fill later; if empty, do not render anywhere
+  websiteUrl: '', // not confirmed yet; do not display anywhere while empty
+  instagramHandle,
+  instagramUrl: instagramHandle ? `https://www.instagram.com/${instagramHandle}/` : '',
 
   // Permissions & Roles
   permissions: {
@@ -48,7 +59,7 @@ export const appConstants = {
     },
   },
 
-  // Sample copy for owner/brand customization
+  // Value props & honest copy
   whyUs: [
     {
       title: 'Free Shipping Across India',
@@ -56,8 +67,8 @@ export const appConstants = {
       icon: 'LocalShippingRounded',
     },
     {
-      title: '100% Personalized with Love',
-      description: 'Custom photo printing, laser engraving, and custom message tags tailored for you.',
+      title: 'Personalization Available',
+      description: 'Custom photo printing, engraving and message tags on selected products.',
       icon: 'FavoriteRounded',
     },
     {
@@ -67,7 +78,7 @@ export const appConstants = {
     },
     {
       title: 'Direct WhatsApp Support',
-      description: 'Chat directly with our gifting artisans before, during, and after crafting your order.',
+      description: 'Chat directly with our team before, during, and after your order.',
       icon: 'SupportAgentRounded',
     },
   ],
@@ -75,8 +86,8 @@ export const appConstants = {
   personalizationSteps: [
     {
       step: '01',
-      title: 'Choose Your Keepsake',
-      description: 'Select from handcrafted wooden frames, glowing lamps, engraved accessories, or custom mugs.',
+      title: 'Choose Your Gift',
+      description: 'Browse personalized gifts, branded apparel, bags and handicraft options.',
     },
     {
       step: '02',
@@ -85,45 +96,17 @@ export const appConstants = {
     },
     {
       step: '03',
-      title: 'Crafted & Delivered to Doorstep',
-      description: 'Our artisans handcraft your gift with meticulous precision, package it securely, and deliver it.',
+      title: 'Prepared & Delivered',
+      description: 'We prepare your order with care, pack it securely, and deliver it to your doorstep.',
     },
   ],
 
-  testimonials: [
-    {
-      id: 1,
-      name: 'Ananya Sharma',
-      city: 'Bengaluru',
-      quote:
-        'The engraved wooden portrait arrived in the most beautiful blush packaging. My parents were in tears on their 25th anniversary. Such exquisite craftsmanship!',
-      rating: 5,
-      product: 'Custom Wooden Photo Frame',
-    },
-    {
-      id: 2,
-      name: 'Rohan Mehra',
-      city: 'Mumbai',
-      quote:
-        'Ordering on WhatsApp was ridiculously smooth. The team confirmed my photo resolution within 10 minutes and delivered right on my girlfriend’s birthday.',
-      rating: 5,
-      product: 'Personalized Acrylic Spotify Lamp',
-    },
-    {
-      id: 3,
-      name: 'Priyanka Verma',
-      city: 'Delhi',
-      quote:
-        'TWS Gifts offers such warm and thoughtful gifts compared to generic online shopping. The golden gift tag detail is perfection.',
-      rating: 5,
-      product: 'Handmade Memory Keepsake Box',
-    },
-  ],
+  testimonials: [],
 
   chatbotQuickReplies: [
-    'Birthday gifts under ₹500',
-    'Anniversary ideas',
-    'Personalized mugs',
-    'Premium gifts',
+    'Corporate & bulk gifting',
+    'Gifts under ₹2000',
+    'Polo T-Shirts',
+    'Backpacks & duffle bags',
   ],
 };

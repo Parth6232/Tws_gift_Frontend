@@ -88,7 +88,7 @@ export default function ProductDetailContainer() {
           Product Not Found
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-          This keepsake might be sold out or unavailable.
+          This product might be sold out or unavailable.
         </Typography>
         <Button component={Link} to="/shop" variant="contained">
           Browse All Gifts
@@ -469,7 +469,7 @@ export default function ProductDetailContainer() {
                 Order on WhatsApp
               </Button>
 
-              <Tooltip title="Share keepsake">
+              <Tooltip title="Share gift">
                 <IconButton
                   onClick={handleShare}
                   sx={{
@@ -523,10 +523,10 @@ export default function ProductDetailContainer() {
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
                 <VerifiedUserOutlinedIcon sx={{ color: theme.palette.primary.main, fontSize: 24 }} />
                 <Typography variant="caption" sx={{ fontWeight: 600 }}>
-                  Artisan Quality
+                  Gift with Purpose
                 </Typography>
                 <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>
-                  Handmade with care
+                  1 gift = 1 stationery kit
                 </Typography>
               </Box>
             </Box>
@@ -550,7 +550,7 @@ export default function ProductDetailContainer() {
           <ProductShelf
             eyebrow="Complete The Moment"
             title="You May Also Cherish"
-            description="Other heartfelt keepsakes from the same collection."
+            description="Other thoughtful gifts from the same collection."
             products={relatedProducts}
           />
         )}

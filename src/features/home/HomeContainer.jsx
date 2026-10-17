@@ -6,7 +6,7 @@ import CategoryStrip from './component/CategoryStrip';
 import ProductShelf from './component/ProductShelf';
 import PersonalizationSteps from './component/PersonalizationSteps';
 import WhyUs from './component/WhyUs';
-import Testimonials from './component/Testimonials';
+import GiftWithPurpose from './component/GiftWithPurpose';
 
 import RibbonDivider from '../../common/RibbonDivider';
 import Button from '../../common/Button';
@@ -48,9 +48,9 @@ export default function HomeContainer() {
 
       {/* 3. Best Sellers Shelf */}
       <ProductShelf
-        eyebrow="Most Adored"
+        eyebrow="Most Loved"
         title="Best Sellers"
-        description="Our most cherished keepsakes chosen by thousands of lovers, families, and friends."
+        description="Our most loved gifts and everyday picks."
         products={bestSellers}
         isLoading={loadingBestSellers}
         viewAllLink="/shop?bestSeller=true"
@@ -61,9 +61,9 @@ export default function HomeContainer() {
 
       {/* 5. New Arrivals Shelf */}
       <ProductShelf
-        eyebrow="Fresh In The Studio"
+        eyebrow="Fresh Additions"
         title="New Arrivals"
-        description="Discover our latest handcrafted gift designs made for modern celebrations."
+        description="Our latest gifts, apparel and accessories."
         products={newArrivals}
         isLoading={loadingNewArrivals}
         viewAllLink="/shop?newArrival=true"
@@ -71,9 +71,9 @@ export default function HomeContainer() {
 
       {/* 6. Premium Collection (Visually Distinct Dark Band) */}
       <ProductShelf
-        eyebrow="Heirloom Grade"
+        eyebrow="Special Occasions"
         title="The Premium Collection"
-        description="Exquisite laser-engraved solid walnut wood, brass accents, and luxury crystal keepsakes."
+        description="Premium picks for special occasions and corporate gifting."
         products={premiumProducts}
         isLoading={loadingPremium}
         viewAllLink="/shop?premium=true"
@@ -83,8 +83,8 @@ export default function HomeContainer() {
       {/* 7. Why TWS Gifts */}
       <WhyUs />
 
-      {/* 8. Testimonials */}
-      <Testimonials />
+      {/* 8. Gift with Purpose (Replaces Testimonials) */}
+      <GiftWithPurpose />
 
       {/* 9. Final CTA Band */}
       <Box
@@ -110,7 +110,7 @@ export default function HomeContainer() {
               lineHeight: 1.15,
             }}
           >
-            Ready to craft something unforgettable?
+            Ready to find the perfect gift?
           </Typography>
 
           <Typography
@@ -124,7 +124,7 @@ export default function HomeContainer() {
               mx: 'auto',
             }}
           >
-            Browse our full shop or talk directly to our artisans to create a custom one-of-a-kind keepsake.
+            Browse our full shop or talk to our team for custom, corporate or bulk gifting.
           </Typography>
 
           <Box
@@ -150,7 +150,7 @@ export default function HomeContainer() {
             <Button
               component="a"
               href={`https://wa.me/${appConstants.whatsappNumber}?text=${encodeURIComponent(
-                'Hello TWS Gifts! I would like to design a custom gift.'
+                'Hello TWS Gifts! I would like to inquire about gifts.'
               )}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -164,7 +164,6 @@ export default function HomeContainer() {
           </Box>
         </Container>
       </Box>
-
     </Box>
   );
 }

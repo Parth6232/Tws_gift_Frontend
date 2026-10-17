@@ -157,7 +157,7 @@ export default function ProductShelf({
             ))
           ) : (
             <Typography variant="body2" color="text.secondary" sx={{ py: 3 }}>
-              New keepsakes arriving soon!
+              New gifts arriving soon!
             </Typography>
           )}
         </Box>

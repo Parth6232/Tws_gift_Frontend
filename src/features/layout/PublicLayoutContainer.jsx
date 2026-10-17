@@ -412,7 +412,7 @@ export default function PublicLayoutContainer() {
                 <InputBase
                   autoFocus
                   fullWidth
-                  placeholder="Search personalized frames, mugs, engraved keepsakes..."
+                  placeholder="Search gifts, polos, bags, jackets..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   sx={{ fontSize: '0.9375rem', color: theme.palette.text.primary }}
@@ -475,7 +475,7 @@ export default function PublicLayoutContainer() {
             <SearchRoundedIcon sx={{ color: theme.palette.text.secondary, mr: 1, fontSize: 20 }} />
             <InputBase
               fullWidth
-              placeholder="Search gifts..."
+              placeholder="Search gifts, polos, bags, jackets..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               sx={{ fontSize: '0.875rem', color: theme.palette.text.primary }}
@@ -595,14 +595,26 @@ export default function PublicLayoutContainer() {
           >
             {/* Col 1: Brand Info */}
             <Box>
-              <Box sx={{ mb: 2 }}>
+              <Box sx={{ mb: 1 }}>
                 <Box sx={isDark ? { backgroundColor: '#FFF8EC', borderRadius: '12px', padding: '8px', display: 'inline-flex' } : {}}>
                   <img
-                    src="/assets/tws-logo-full.png"
+                    src="/assets/tws-logo-no-tagline.png"
                     alt="TWS Gifts"
                     style={{ maxWidth: 220, width: '100%', height: 'auto', display: 'block' }}
                   />
                 </Box>
+                <Typography
+                  sx={{
+                    fontFamily: '"Fraunces", serif',
+                    fontStyle: 'italic',
+                    color: '#CC9425',
+                    fontSize: '0.9375rem',
+                    fontWeight: 600,
+                    mt: 1,
+                  }}
+                >
+                  {appConstants.tagline}
+                </Typography>
               </Box>
 
               <Typography
@@ -614,7 +626,7 @@ export default function PublicLayoutContainer() {
                   mb: 2.5,
                 }}
               >
-                {appConstants.tagline} {appConstants.subTagline} Handcrafted keepsakes made for life's most precious milestones.
+                {appConstants.tagline} {appConstants.subTagline} 1 gift purchased = 1 stationery kit donated.
               </Typography>
 
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -699,7 +711,7 @@ export default function PublicLayoutContainer() {
                 Need Help Gifting?
               </Typography>
               <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 2, lineHeight: 1.6 }}>
-                Chat directly with our artisan team for custom designs, corporate orders, or delivery queries.
+                Chat with our team for custom designs, corporate &amp; bulk orders, or delivery queries.
               </Typography>
 
               <Box
@@ -720,10 +732,49 @@ export default function PublicLayoutContainer() {
                   fontSize: '0.875rem',
                   transition: 'background-color 0.2s',
                   '&:hover': { backgroundColor: '#1EBE5D' },
+                  mb: 2,
                 }}
               >
                 <WhatsAppIcon sx={{ fontSize: 20 }} />
                 <span>Chat on WhatsApp</span>
+              </Box>
+
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75, mt: 1 }}>
+                <Typography variant="caption" sx={{ color: theme.palette.text.primary, fontWeight: 600 }}>
+                  Phone: {appConstants.phoneDisplay}
+                </Typography>
+                <Typography
+                  component="a"
+                  href={`mailto:${appConstants.contactEmail}`}
+                  variant="caption"
+                  sx={{
+                    color: theme.palette.text.secondary,
+                    textDecoration: 'none',
+                    '&:hover': { textDecoration: 'underline' },
+                  }}
+                >
+                  Email: {appConstants.contactEmail}
+                </Typography>
+                <Typography variant="caption" sx={{ color: theme.palette.text.secondary, lineHeight: 1.5, maxWidth: 280 }}>
+                  {appConstants.fullAddress}
+                </Typography>
+                {appConstants.instagramHandle && appConstants.instagramUrl && (
+                  <Typography
+                    component="a"
+                    href={appConstants.instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="caption"
+                    sx={{
+                      color: theme.palette.primary.main,
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                      '&:hover': { textDecoration: 'underline' },
+                    }}
+                  >
+                    Instagram: @{appConstants.instagramHandle}
+                  </Typography>
+                )}
               </Box>
             </Box>
           </Box>

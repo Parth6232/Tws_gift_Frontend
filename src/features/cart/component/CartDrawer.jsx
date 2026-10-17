@@ -89,7 +89,7 @@ export default function CartDrawer() {
         {items.length === 0 ? (
           <EmptyState
             title="Your bag is empty"
-            description="Explore our personalized gifts collection and add cherished keepsakes to your bag."
+            description="Explore our personalized gifts collection and add your favorite items to your bag."
             actionText="Browse Gifts"
             onAction={() => {
               handleClose();

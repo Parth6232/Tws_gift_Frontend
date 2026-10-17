@@ -28,13 +28,13 @@ export default function WishlistContainer() {
         <SectionHeading
           eyebrow="Saved Memories"
           title="Your Wishlist"
-          description="A personal gallery of handcrafted keepsakes you have your heart set on."
+          description="A personal gallery of favorite gifts you have your heart set on."
         />
 
         {items.length === 0 ? (
           <EmptyState
             title="Your wishlist is empty"
-            description="Explore our collections and tap the heart icon on any keepsake to save it for later."
+            description="Explore our collections and tap the heart icon on any gift to save it for later."
             actionText="Discover Gifts"
             onAction={() => (window.location.href = '/shop')}
           />

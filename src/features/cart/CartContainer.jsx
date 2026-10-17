@@ -47,13 +47,13 @@ export default function CartContainer() {
         <SectionHeading
           eyebrow="Review Your Selection"
           title="Your Gifting Bag"
-          description="Review customized keepsakes before confirming order and details on WhatsApp."
+          description="Review your selected gifts before confirming order and details on WhatsApp."
         />
 
         {items.length === 0 ? (
           <EmptyState
             title="Your bag is waiting for memories"
-            description="Explore our personalized wooden frames, engraved keepsakes, and anniversary lamps to begin."
+            description="Explore our personalized gifts, apparel, bags and accessories to begin."
             actionText="Start Shopping"
             onAction={() => (window.location.href = '/shop')}
           />

@@ -193,10 +193,10 @@ export default function ProductFormContainer() {
               mb: 0.5,
             }}
           >
-            {isEditing ? 'Edit Keepsake' : 'Add New Keepsake'}
+            {isEditing ? 'Edit Product' : 'Add New Product'}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Fill in the product specifications, upload artisan photos, and set catalog flags.
+            Fill in the product specifications, upload product photos, and set catalog flags.
           </Typography>
         </Box>
 

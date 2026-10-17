@@ -24,7 +24,7 @@ export default function WhyUs() {
         <SectionHeading
           eyebrow="The TWS Gifts Promise"
           title="Why Gifting With Us Feels Different"
-          description="Every memory entrusted to us receives artisan care, heartfelt packaging, and dedicated human support."
+          description="Every order receives careful packing, gift-ready presentation, and dedicated human support."
         />
 
         <Box

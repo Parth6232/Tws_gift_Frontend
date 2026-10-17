@@ -192,12 +192,12 @@ export default function ShopContainer() {
           eyebrow="The Gift Collection"
           title={
             activeCategory
-              ? categories.find((c) => c.slug === activeCategory)?.name || 'Custom Keepsakes'
+              ? categories.find((c) => c.slug === activeCategory)?.name || 'Our Collection'
               : activeSearch
               ? `Results for "${activeSearch}"`
-              : 'Discover Handcrafted Gifts'
+              : 'Discover Our Gifts'
           }
-          description="Browse personalized treasures made to celebrate birthdays, anniversaries, and forever memories."
+          description="Browse personalized gifts, corporate gifting, apparel, bags and handicraft pieces."
           centered={false}
         />
 

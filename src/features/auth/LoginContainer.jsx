@@ -111,20 +111,34 @@ export default function LoginContainer() {
           }}
         >
           {/* Top Brand Logo */}
+          <Box>
             <Box sx={isDark ? { backgroundColor: '#FFF8EC', borderRadius: '12px', padding: '8px', display: 'inline-flex' } : {}}>
               <img
-                src="/assets/tws-logo-full.png"
+                src="/assets/tws-logo-no-tagline.png"
                 alt="TWS Gifts"
                 style={{ maxWidth: 220, width: '100%', height: 'auto', objectFit: 'contain' }}
               />
             </Box>
+            <Typography
+              sx={{
+                fontFamily: '"Fraunces", serif',
+                fontStyle: 'italic',
+                color: '#CC9425',
+                fontSize: '0.9375rem',
+                fontWeight: 600,
+                mt: 1,
+              }}
+            >
+              {appConstants.tagline}
+            </Typography>
+          </Box>
 
           {/* Center Graphic & Quotes */}
           <Box sx={{ my: 'auto', textAlign: 'center', py: 4 }}>
             <Box
               sx={{
-                width: 180,
-                height: 180,
+                width: 140,
+                height: 140,
                 borderRadius: '32px',
                 mx: 'auto',
                 mb: 3,
@@ -138,9 +152,9 @@ export default function LoginContainer() {
             >
               <Box sx={isDark ? { backgroundColor: '#FFF8EC', borderRadius: '16px', padding: '12px', display: 'inline-flex' } : {}}>
                 <img
-                  src="/assets/tws-logo-full.png"
+                  src="/assets/tws-logo-mark.png"
                   alt="TWS Gifts"
-                  style={{ width: '100%', height: '100%', maxWidth: 160, objectFit: 'contain' }}
+                  style={{ width: '100%', height: '100%', maxWidth: 90, objectFit: 'contain' }}
                 />
               </Box>
             </Box>
@@ -161,7 +175,7 @@ export default function LoginContainer() {
               variant="body2"
               sx={{ color: theme.palette.text.secondary, maxWidth: 360, mx: 'auto', lineHeight: 1.6 }}
             >
-              Manage handcrafted products, curate category shelves, audit team activity, and delight gifting customers.
+              Manage products, categories, team access and activity for TWS Gifts.
             </Typography>
           </Box>
 
@@ -225,7 +239,7 @@ export default function LoginContainer() {
           <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
             <Textfield
               label="Staff Email Address"
-              placeholder="admin@savrigifts.com"
+              placeholder="admin@twsgifts.com"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

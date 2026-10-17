@@ -22,11 +22,11 @@ export default function NotFoundPage() {
       </Typography>
 
       <Typography variant="h4" sx={{ fontFamily: '"Fraunces", serif', fontWeight: 600, mb: 2 }}>
-        Keepsake Not Found
+        Page Not Found
       </Typography>
 
       <Typography variant="body1" color="text.secondary" sx={{ mb: 4, lineHeight: 1.6 }}>
-        The memory or page you are looking for may have moved or no longer exists. Let’s take you back
+        The gift or page you are looking for may have moved or no longer exists. Let’s take you back
         to our collection.
       </Typography>
 

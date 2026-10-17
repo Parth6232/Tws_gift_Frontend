@@ -192,7 +192,7 @@ export default function ThemedComponentsSheet() {
               />
 
               <Textfield
-                label="Search Keepsakes"
+                label="Search Gifts"
                 placeholder="Search gifts..."
                 startIcon={<SearchRoundedIcon sx={{ color: theme.palette.text.secondary }} />}
                 value=""
@@ -327,7 +327,7 @@ export default function ThemedComponentsSheet() {
               <InfoAlert
                 type="warning"
                 title="Delivery Cut-off Notice"
-                messages={['Orders placed after 4 PM IST will be processed by artisans the next morning.']}
+                messages={['Orders placed after 4 PM IST will be processed the next morning.']}
               />
               <InfoAlert
                 type="success"
