@@ -6,7 +6,6 @@ import {
   Badge,
   useTheme,
   Container,
-  InputBase,
   Menu,
   MenuItem,
   Drawer,
@@ -27,6 +26,7 @@ import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import ThemeToggle from '../../common/ThemeToggle';
 import CartDrawer from '../cart/component/CartDrawer';
 import ChatbotContainer from '../chatbot/ChatbotContainer';
+import SearchSuggest from '../../common/SearchSuggest';
 import { cartActions } from '../cart/cartSlice';
 import { commonApiAction } from '../../store/redux/slices/commonApiSlice';
 import { appConstants } from '../../constant/appConstants';
@@ -103,19 +103,9 @@ export default function PublicLayoutContainer() {
   const [categoryAnchor, setCategoryAnchor] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const totalCartCount = cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
   const totalWishlistCount = wishlistItems.length;
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchOpen(false);
-      setSearchQuery('');
-    }
-  };
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -386,8 +376,6 @@ export default function PublicLayoutContainer() {
           {/* Animated Expandable Search Bar */}
           {searchOpen && (
             <Box
-              component="form"
-              onSubmit={handleSearchSubmit}
               sx={{
                 pb: 2,
                 display: 'flex',
@@ -395,29 +383,12 @@ export default function PublicLayoutContainer() {
                 gap: 1.5,
               }}
             >
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  flex: 1,
-                  px: 2,
-                  py: 1,
-                  borderRadius: '12px',
-                  backgroundColor: theme.palette.background.paper,
-                  border: `1.5px solid ${theme.palette.primary.main}`,
-                  boxShadow: '0 4px 16px rgba(217, 69, 107, 0.1)',
-                }}
-              >
-                <SearchRoundedIcon sx={{ color: theme.palette.primary.main, mr: 1 }} />
-                <InputBase
-                  autoFocus
-                  fullWidth
-                  placeholder="Search gifts, polos, bags, jackets..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  sx={{ fontSize: '0.9375rem', color: theme.palette.text.primary }}
-                />
-              </Box>
+              <SearchSuggest
+                placeholder="Search gifts, polos, bags, jackets..."
+                autoFocus
+                onClose={() => setSearchOpen(false)}
+                inputSx={{ flex: 1 }}
+              />
               <IconButton onClick={() => setSearchOpen(false)}>
                 <CloseRoundedIcon />
               </IconButton>
@@ -455,30 +426,11 @@ export default function PublicLayoutContainer() {
 
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
           {/* Drawer Search Input */}
-          <Box
-            component="form"
-            onSubmit={(e) => {
-              handleSearchSubmit(e);
-              setMobileMenuOpen(false);
-            }}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              px: 1.5,
-              py: 0.5,
-              borderRadius: '10px',
-              backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : '#F5EBE1',
-              border: `1px solid ${theme.palette.divider}`,
-              mb: 1,
-            }}
-          >
-            <SearchRoundedIcon sx={{ color: theme.palette.text.secondary, mr: 1, fontSize: 20 }} />
-            <InputBase
-              fullWidth
-              placeholder="Search gifts, polos, bags, jackets..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              sx={{ fontSize: '0.875rem', color: theme.palette.text.primary }}
+          <Box sx={{ mb: 1 }}>
+            <SearchSuggest
+              placeholder="Search gifts, polos, bags..."
+              onClose={() => setMobileMenuOpen(false)}
+              inputSx={{ width: '100%' }}
             />
           </Box>
           {navLinks.map((link) => (

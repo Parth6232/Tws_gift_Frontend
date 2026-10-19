@@ -279,6 +279,7 @@ export default function TeamContainer() {
         setTablePagination={setTablePagination}
         onRowClick={handleRowClick}
         search={true}
+        clientSidePagination={true}
       />
 
       {/* Add User Modal */}

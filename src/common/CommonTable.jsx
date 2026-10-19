@@ -1,13 +1,13 @@
-import React from 'react';
-import { Box, Tooltip, Typography, useTheme } from '@mui/material';
+import React, { useState, useEffect, useRef } from 'react';
+import { Box, Tooltip, Typography, IconButton, useTheme } from '@mui/material';
 import DataRenderer from './DataRenderer';
 import DataGridBase from './DataGridBase';
 import Text from './Text';
 import Button from './Button';
 import SearchIcon from '@mui/icons-material/Search';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import AddIcon from '@mui/icons-material/Add';
 import Textfield from './Textfield';
-import { debounce } from '../utils/helper';
 
 export default function CommonTable({
   title,
@@ -24,8 +24,51 @@ export default function CommonTable({
   handleAddClick = () => {},
   addButton,
   search = true,
+  clientSidePagination = false,
 }) {
   const theme = useTheme();
+
+  const [searchText, setSearchText] = useState(tablePagination?.search || '');
+  const lastEmittedRef = useRef(tablePagination?.search || '');
+
+  // Keep searchText in sync if tablePagination.search changes externally
+  useEffect(() => {
+    const externalSearch = tablePagination?.search ?? '';
+    if (externalSearch !== lastEmittedRef.current) {
+      lastEmittedRef.current = externalSearch;
+      setSearchText(externalSearch);
+    }
+  }, [tablePagination?.search]);
+
+  // Debounced search update: 350ms
+  useEffect(() => {
+    const trimmed = searchText.trim();
+    if ((tablePagination?.search ?? '') === trimmed) return;
+
+    const timer = setTimeout(() => {
+      lastEmittedRef.current = trimmed;
+      setTablePagination((prev) => {
+        if ((prev?.search ?? '') === trimmed) return prev;
+        return {
+          ...prev,
+          search: trimmed,
+          page: 0,
+        };
+      });
+    }, 350);
+
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
+  const handleClearSearch = () => {
+    setSearchText('');
+    lastEmittedRef.current = '';
+    setTablePagination((prev) => ({
+      ...prev,
+      search: '',
+      page: 0,
+    }));
+  };
 
   const columns = columnsConfig.map(
     ({ label, field, component, minWidth = 140, sortable = false, renderHeader }) => ({
@@ -56,33 +99,52 @@ export default function CommonTable({
     })
   );
 
-  const rowsData = Array.isArray(data)
-    ? data.map((item, index) => {
-        const pageSize = tablePagination?.pageSize || 10;
-        const currentPage = tablePagination?.page || 0;
+  const pageSize = tablePagination?.pageSize || 10;
+  const page = tablePagination?.page || 0;
+  const totalCount = totalData ?? (Array.isArray(data) ? data.length : 0);
+
+  // If the current page becomes out of range (e.g. after filtering), reset page to 0.
+  useEffect(() => {
+    if (clientSidePagination) {
+      const dataLen = Array.isArray(data) ? data.length : 0;
+      if (page > 0 && page * pageSize >= dataLen) {
+        setTablePagination((prev) => ({ ...prev, page: 0 }));
+      }
+    }
+  }, [clientSidePagination, data, page, pageSize, setTablePagination]);
+
+  const safePage =
+    clientSidePagination && page > 0 && page * pageSize >= (Array.isArray(data) ? data.length : 0)
+      ? 0
+      : page;
+
+  const displayData =
+    clientSidePagination && Array.isArray(data)
+      ? data.slice(safePage * pageSize, safePage * pageSize + pageSize)
+      : data;
+
+  const rowsData = Array.isArray(displayData)
+    ? displayData.map((item, index) => {
         return {
           ...item,
-          rowId: currentPage * pageSize + index + 1,
-          id: item?._id || item?.id || currentPage * pageSize + index + 1,
+          rowId: safePage * pageSize + index + 1,
+          id: item?._id || item?.id || safePage * pageSize + index + 1,
         };
       })
     : [];
 
-  const handleOnChangeTablePagination = ({ page, pageSize }) => {
+  const handleOnChangeTablePagination = ({ page: newPage, pageSize: newPageSize }) => {
     setTablePagination((prev) => ({
       ...prev,
-      page,
-      pageSize,
+      page: newPage,
+      pageSize: newPageSize,
     }));
   };
 
-  const debouncedSearch = debounce((e) => {
-    setTablePagination((prev) => ({
-      ...prev,
-      search: e.target.value,
-      page: 0,
-    }));
-  }, 300);
+  const emptyStateMessage =
+    searchText.trim() && rowsData.length === 0
+      ? `No results for "${searchText.trim()}"`
+      : message;
 
   return (
     <Box sx={{ mt: 2, width: '100%' }}>
@@ -113,8 +175,21 @@ export default function CommonTable({
                 width: { xs: '100%', sm: 260 },
               }}
               placeholder="Search..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
               startIcon={<SearchIcon sx={{ color: theme.palette.text.secondary }} />}
-              onChange={debouncedSearch}
+              endIcon={
+                searchText ? (
+                  <IconButton
+                    size="small"
+                    onClick={handleClearSearch}
+                    aria-label="Clear search"
+                    sx={{ p: 0.5, color: theme.palette.text.secondary }}
+                  >
+                    <CloseRoundedIcon sx={{ fontSize: 16 }} />
+                  </IconButton>
+                ) : null
+              }
             />
           )}
 
@@ -135,15 +210,15 @@ export default function CommonTable({
         isLoading={isLoading}
         isCalled={isCalled}
         hasData={!!rowsData.length}
-        message={message}
+        message={emptyStateMessage}
         dataComponent={
           <DataGridBase
             rows={rowsData}
             columns={columns}
-            rowCount={totalData ?? data?.length ?? 0}
+            rowCount={totalCount}
             paginationModel={{
-              page: tablePagination?.page || 0,
-              pageSize: tablePagination?.pageSize || 10,
+              page: safePage,
+              pageSize,
             }}
             onPaginationModelChange={handleOnChangeTablePagination}
             onRowClick={onRowClick}

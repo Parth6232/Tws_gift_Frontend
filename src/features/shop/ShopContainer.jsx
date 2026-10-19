@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,
   Container,
@@ -13,21 +13,26 @@ import {
   IconButton,
   Chip,
   useMediaQuery,
+  CircularProgress,
 } from '@mui/material';
 import { useSearchParams, useParams } from 'react-router-dom';
 import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import SectionHeading from '../../common/SectionHeading';
 import ProductCard from '../../common/ProductCard';
 import EmptyState from '../../common/EmptyState';
 import { ProductCardSkeleton } from '../../common/Skeleton';
 import Button from '../../common/Button';
+import Textfield from '../../common/Textfield';
 import { productApiAction } from '../product/productApiSlice';
 import { commonApiAction } from '../../store/redux/slices/commonApiSlice';
 import { formatCurrency } from '../../utils/helper';
+import { useDebouncedValue } from '../../utils/useDebounce';
 
 export default function ShopContainer() {
   const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [searchParams, setSearchParams] = useSearchParams();
   const { categorySlug } = useParams();
@@ -45,6 +50,53 @@ export default function ShopContainer() {
   const [priceRange, setPriceRange] = useState([minPriceParam, maxPriceParam]);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [page, setPage] = useState(1);
+
+  // Search input state with debounce
+  const [searchInput, setSearchInput] = useState(activeSearch);
+  const debouncedSearch = useDebouncedValue(searchInput, 400);
+
+  // Keep searchInput in sync when URL search param changes externally
+  useEffect(() => {
+    setSearchInput(activeSearch);
+  }, [activeSearch]);
+
+  // Debounced URL update (only when length >= 2 or empty)
+  useEffect(() => {
+    const trimmed = debouncedSearch.trim();
+    if (trimmed.length === 1) return;
+
+    const currentUrlSearch = searchParams.get('search') || '';
+    if (trimmed !== currentUrlSearch) {
+      const next = new URLSearchParams(searchParams);
+      if (trimmed) {
+        next.set('search', trimmed);
+      } else {
+        next.delete('search');
+      }
+      setSearchParams(next, { replace: true });
+    }
+  }, [debouncedSearch]);
+
+  // Bug fix: reset local page to 1 whenever search, category, sort or any filter in the URL changes
+  const filterSignature = `${categorySlug || ''}_${searchParams.toString()}`;
+  const prevFilterSigRef = useRef(filterSignature);
+
+  useEffect(() => {
+    if (prevFilterSigRef.current !== filterSignature) {
+      prevFilterSigRef.current = filterSignature;
+      setPage(1);
+    }
+  }, [filterSignature]);
+
+  const handleClearSearch = () => {
+    setSearchInput('');
+    const currentUrlSearch = searchParams.get('search') || '';
+    if (currentUrlSearch) {
+      const next = new URLSearchParams(searchParams);
+      next.delete('search');
+      setSearchParams(next, { replace: true });
+    }
+  };
 
   const { data: categories = [] } = commonApiAction.useGetCategoriesQuery();
 
@@ -64,9 +116,26 @@ export default function ShopContainer() {
   const { data: productsData, isLoading, isFetching } =
     productApiAction.useGetProductsQuery(queryParams);
 
-  const items = productsData?.items || [];
-  const total = productsData?.total || 0;
-  const pages = productsData?.pages || 1;
+  // Keep showing previous results while a new query loads; show skeleton only on first load
+  const prevDataRef = useRef(null);
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
+
+  if (productsData) {
+    prevDataRef.current = productsData;
+  }
+
+  useEffect(() => {
+    if (productsData && !hasLoadedOnce) {
+      setHasLoadedOnce(true);
+    }
+  }, [productsData, hasLoadedOnce]);
+
+  const effectiveData = productsData || prevDataRef.current;
+  const items = effectiveData?.items || [];
+  const total = effectiveData?.total || 0;
+  const pages = effectiveData?.pages || 1;
+  const isRelaxed = Boolean(effectiveData?.relaxed);
+  const showInitialSkeleton = !hasLoadedOnce && isLoading;
 
   const updateFilter = (key, value) => {
     const next = new URLSearchParams(searchParams);
@@ -304,7 +373,52 @@ export default function ShopContainer() {
 
           {/* Product Grid Area */}
           <Box>
-            {isLoading ? (
+            {/* In-page Search Field */}
+            <Box sx={{ mb: 3, position: 'relative' }}>
+              <Textfield
+                sx={{
+                  width: { xs: '100%', sm: 420 },
+                }}
+                placeholder="Search gifts, polos, bags..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                startIcon={<SearchRoundedIcon sx={{ color: theme.palette.text.secondary }} />}
+                endIcon={
+                  isFetching ? (
+                    <CircularProgress size={16} color="primary" />
+                  ) : searchInput ? (
+                    <IconButton
+                      size="small"
+                      onClick={handleClearSearch}
+                      aria-label="Clear search"
+                      sx={{ p: 0.5, color: theme.palette.text.secondary }}
+                    >
+                      <CloseRoundedIcon sx={{ fontSize: 16 }} />
+                    </IconButton>
+                  ) : null
+                }
+              />
+            </Box>
+
+            {/* Relaxed / close-match banner */}
+            {isRelaxed && activeSearch && (
+              <Box
+                sx={{
+                  mb: 2,
+                  px: 2,
+                  py: 1,
+                  borderRadius: '10px',
+                  backgroundColor: isDark ? 'rgba(201,162,75,0.12)' : '#FFF8E7',
+                  border: `1px solid ${isDark ? 'rgba(201,162,75,0.3)' : '#FFECB3'}`,
+                }}
+              >
+                <Typography variant="caption" sx={{ color: isDark ? '#C9A24B' : '#8A6A00', fontWeight: 500 }}>
+                  No exact match for &ldquo;{activeSearch}&rdquo;. Showing close matches.
+                </Typography>
+              </Box>
+            )}
+
+            {showInitialSkeleton ? (
               <Box
                 sx={{
                   display: 'grid',
@@ -330,6 +444,8 @@ export default function ShopContainer() {
                     display: 'grid',
                     gridTemplateColumns: { xs: 'repeat(2, minmax(140px, 1fr))', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' },
                     gap: { xs: 2, sm: 2.5, md: 3 },
+                    opacity: isFetching ? 0.6 : 1,
+                    transition: 'opacity 0.25s ease',
                   }}
                 >
                   {items.map((prod) => (

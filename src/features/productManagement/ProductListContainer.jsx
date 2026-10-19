@@ -64,18 +64,30 @@ export default function ProductListContainer() {
     }
   };
 
-  // Filter products by search and category
-  const filteredProducts = products.filter((prod) => {
-    const matchesSearch = tablePagination.search
-      ? prod.title.toLowerCase().includes(tablePagination.search.toLowerCase()) ||
-        prod.category?.name?.toLowerCase().includes(tablePagination.search.toLowerCase())
-      : true;
+  const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+  // Filter products by search (multi-word match) and category
+  const searchWords = (tablePagination.search || '')
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  const filteredProducts = products.filter((prod) => {
     const matchesCategory = selectedCategory
       ? prod.category?._id === selectedCategory || prod.category?.slug === selectedCategory
       : true;
 
-    return matchesSearch && matchesCategory;
+    if (!matchesCategory) return false;
+
+    if (!searchWords.length) return true;
+
+    const targetText = `${prod.title || ''} ${prod.slug || ''} ${prod.category?.name || ''} ${(prod.tags || []).join(' ')}`;
+
+    return searchWords.every((word) => {
+      const rx = new RegExp('(^|[^a-zA-Z0-9])' + escapeRegex(word), 'i');
+      return rx.test(targetText);
+    });
   });
 
   const columnsConfig = [
@@ -263,13 +275,19 @@ export default function ProductListContainer() {
               ? 'View, edit, and organize all personalized gifts across TWS Gifts.'
               : 'Add and manage personalized gifts created by you.'}
           </Typography>
+          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
+            Showing {filteredProducts.length} of {products.length} products
+          </Typography>
         </Box>
 
         <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', alignItems: 'center', width: { xs: '100%', sm: 'auto' } }}>
           {/* Category Filter Dropdown */}
           <Select
             value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
+            onChange={(e) => {
+              setSelectedCategory(e.target.value);
+              setTablePagination((prev) => ({ ...prev, page: 0 }));
+            }}
             displayEmpty
             size="small"
             sx={{
@@ -310,6 +328,7 @@ export default function ProductListContainer() {
         tablePagination={tablePagination}
         setTablePagination={setTablePagination}
         search={true}
+        clientSidePagination={true}
       />
 
       {/* Delete Confirmation Modal */}
