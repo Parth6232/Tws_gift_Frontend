@@ -8,6 +8,7 @@ import SectionHeading from '../common/SectionHeading';
 import Button from '../common/Button';
 import PageTransition from '../common/PageTransition';
 import CorporateBulkCta from '../common/CorporateBulkCta';
+import SocialLinks from '../common/SocialLinks';
 import { appConstants } from '../constant/appConstants';
 
 export default function ContactPage() {
@@ -191,6 +192,46 @@ export default function ContactPage() {
               )}
             </Paper>
           </Box>
+
+          {/* Social Links Card */}
+          {Object.values(appConstants.socialLinks || {}).some(Boolean) && (
+            <Paper
+              elevation={0}
+              sx={{
+                p: { xs: 3, sm: 4 },
+                borderRadius: '20px',
+                border: `1px solid ${theme.palette.divider}`,
+                backgroundColor: theme.palette.background.paper,
+                textAlign: 'center',
+                mb: 4,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: '"Fraunces", serif',
+                  fontWeight: 600,
+                  fontSize: { xs: '1.25rem', sm: '1.4rem' },
+                  color: theme.palette.text.primary,
+                  mb: 1,
+                }}
+              >
+                Follow Our Journey
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: theme.palette.text.secondary,
+                  maxWidth: 500,
+                  mx: 'auto',
+                  mb: 3,
+                  lineHeight: 1.6,
+                }}
+              >
+                Connect with us on social media for custom gift showcases, behind-the-scenes stories, and community updates.
+              </Typography>
+              <SocialLinks variant="pills" align="center" />
+            </Paper>
+          )}
 
           {/* Corporate & Bulk CTA */}
           <CorporateBulkCta sx={{ mt: 5 }} />

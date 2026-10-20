@@ -27,6 +27,7 @@ import ThemeToggle from '../../common/ThemeToggle';
 import CartDrawer from '../cart/component/CartDrawer';
 import ChatbotContainer from '../chatbot/ChatbotContainer';
 import SearchSuggest from '../../common/SearchSuggest';
+import SocialLinks from '../../common/SocialLinks';
 import { cartActions } from '../cart/cartSlice';
 import { commonApiAction } from '../../store/redux/slices/commonApiSlice';
 import { appConstants } from '../../constant/appConstants';
@@ -581,6 +582,21 @@ export default function PublicLayoutContainer() {
                 {appConstants.tagline} {appConstants.subTagline} 1 gift purchased = 1 stationery kit donated.
               </Typography>
 
+              <Typography
+                variant="caption"
+                sx={{
+                  display: 'block',
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: theme.palette.text.secondary,
+                  mb: 1,
+                }}
+              >
+                Follow Us
+              </Typography>
+              <SocialLinks sx={{ mb: 2.5 }} />
+
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
                   Made with love in India 🇮🇳
@@ -710,23 +726,6 @@ export default function PublicLayoutContainer() {
                 <Typography variant="caption" sx={{ color: theme.palette.text.secondary, lineHeight: 1.5, maxWidth: 280 }}>
                   {appConstants.fullAddress}
                 </Typography>
-                {appConstants.instagramHandle && appConstants.instagramUrl && (
-                  <Typography
-                    component="a"
-                    href={appConstants.instagramUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="caption"
-                    sx={{
-                      color: theme.palette.primary.main,
-                      fontWeight: 600,
-                      textDecoration: 'none',
-                      '&:hover': { textDecoration: 'underline' },
-                    }}
-                  >
-                    Instagram: @{appConstants.instagramHandle}
-                  </Typography>
-                )}
               </Box>
             </Box>
           </Box>

@@ -24,6 +24,14 @@ export const appConstants = {
   instagramHandle,
   instagramUrl: instagramHandle ? `https://www.instagram.com/${instagramHandle}/` : '',
 
+  // Social media links — add/remove here; empty string = platform won't render
+  socialLinks: {
+    instagram: 'https://www.instagram.com/tws_gifts/',
+    facebook: 'https://www.facebook.com/profile.php?id=61595419260575',
+    linkedin: 'https://www.linkedin.com/company/tws-gifts-%E2%80%93-personalized-corporate-gifting/',
+    google: 'https://share.google/kS21kzrjF2a9dlv6p',
+  },
+
   // Permissions & Roles
   permissions: {
     PRODUCT_CREATE: 'product:create',

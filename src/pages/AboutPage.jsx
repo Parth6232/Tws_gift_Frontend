@@ -7,6 +7,7 @@ import PageTransition from '../common/PageTransition';
 import RibbonDivider from '../common/RibbonDivider';
 import GiftEquation from '../common/GiftEquation';
 import CorporateBulkCta from '../common/CorporateBulkCta';
+import SocialLinks from '../common/SocialLinks';
 import { appConstants } from '../constant/appConstants';
 
 const hindiTypographySx = {
@@ -339,6 +340,25 @@ export default function AboutPage() {
             >
               {appConstants.tagline}
             </Typography>
+
+            {Object.values(appConstants.socialLinks || {}).some(Boolean) && (
+              <Box sx={{ mt: 3 }}>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    display: 'block',
+                    fontWeight: 700,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color: theme.palette.text.secondary,
+                    mb: 1.5,
+                  }}
+                >
+                  Follow our journey
+                </Typography>
+                <SocialLinks align="center" />
+              </Box>
+            )}
           </Box>
 
           <RibbonDivider sx={{ mt: 6 }} />
