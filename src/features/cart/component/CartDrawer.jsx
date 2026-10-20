@@ -19,6 +19,7 @@ import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import { cartActions } from '../cartSlice';
 import { formatCurrency, generateCartWhatsAppUrl } from '../../../utils/helper';
 import { optimizeImage } from '../../../utils/imageUrl';
+import { appConstants } from '../../../constant/appConstants';
 import Button from '../../../common/Button';
 import EmptyState from '../../../common/EmptyState';
 
@@ -161,6 +162,17 @@ export default function CartDrawer() {
                     }}
                   >
                     {formatCurrency(item.price)}
+                    <Box
+                      component="span"
+                      sx={{
+                        fontSize: '0.7rem',
+                        fontWeight: 500,
+                        color: theme.palette.text.secondary,
+                        ml: 0.75,
+                      }}
+                    >
+                      each • min. {appConstants.minOrderQty} pcs
+                    </Box>
                   </Typography>
 
                   {/* Quantity Stepper & Remove */}
@@ -179,6 +191,7 @@ export default function CartDrawer() {
                         onClick={() =>
                           dispatch(cartActions.updateQuantity({ id: item._id, quantity: item.quantity - 1 }))
                         }
+                        disabled={item.quantity <= appConstants.minOrderQty}
                         sx={{ p: 0.5, color: theme.palette.text.secondary }}
                       >
                         <RemoveRoundedIcon sx={{ fontSize: 14 }} />

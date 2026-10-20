@@ -79,13 +79,14 @@ export const generateCartWhatsAppUrl = (cartItems = [], customerNote = '') => {
  * Generate WhatsApp URL for single product inquiry or order
  * @param {Object} product
  * @param {string} customNote
+ * @param {number} quantity
  * @returns {string}
  */
-export const generateProductWhatsAppUrl = (product, customNote = '') => {
+export const generateProductWhatsAppUrl = (product, customNote = '', quantity = appConstants.minOrderQty) => {
   const phone = appConstants.whatsappNumber.replace(/[^0-9]/g, '');
   const productUrl = `${window.location.origin}/product/${product?.slug}`;
 
-  let message = `Hello TWS Gifts! 🎁\nI am interested in ordering:\n*${product?.title}*\nPrice: ${formatCurrency(product?.price)}\nLink: ${productUrl}`;
+  let message = `Hello TWS Gifts! 🎁\nI am interested in ordering:\n*${product?.title}*\nPrice: ${formatCurrency(product?.price)} each\nQuantity: ${quantity} pcs\nLink: ${productUrl}`;
 
   if (customNote) {
     message += `\n\nPersonalization details: "${customNote}"`;

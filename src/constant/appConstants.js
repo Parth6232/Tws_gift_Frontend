@@ -24,6 +24,9 @@ export const appConstants = {
   instagramHandle,
   instagramUrl: instagramHandle ? `https://www.instagram.com/${instagramHandle}/` : '',
 
+  // Minimum order quantity for every product (corporate / personalized gifting)
+  minOrderQty: 10,
+
   // Social media links — add/remove here; empty string = platform won't render
   socialLinks: {
     instagram: 'https://www.instagram.com/tws_gifts/',

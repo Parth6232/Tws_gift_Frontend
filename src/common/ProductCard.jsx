@@ -13,6 +13,7 @@ import { optimizeImage, getSrcSet } from '../utils/imageUrl';
 import { wishlistActions } from '../features/wishlist/wishlistSlice';
 import { cartActions } from '../features/cart/cartSlice';
 import { generateProductWhatsAppUrl } from '../utils/helper';
+import { appConstants } from '../constant/appConstants';
 
 export default function ProductCard({ product, sx = {} }) {
   const theme = useTheme();
@@ -52,7 +53,7 @@ export default function ProductCard({ product, sx = {} }) {
     e.preventDefault();
     e.stopPropagation();
     if (soldOut) return;
-    dispatch(cartActions.addToCart({ ...product, quantity: 1 }));
+    dispatch(cartActions.addToCart({ ...product, quantity: appConstants.minOrderQty }));
   };
 
   const handleWhatsAppInquiry = (e) => {

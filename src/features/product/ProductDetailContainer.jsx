@@ -34,6 +34,9 @@ import { wishlistActions } from '../wishlist/wishlistSlice';
 import { toastActions } from '../../store/redux/slices/toastSlice';
 import { optimizeImage, getSrcSet } from '../../utils/imageUrl';
 import { formatCurrency, generateProductWhatsAppUrl } from '../../utils/helper';
+import { appConstants } from '../../constant/appConstants';
+
+const MIN_QTY = appConstants.minOrderQty;
 
 export default function ProductDetailContainer() {
   const { slug } = useParams();
@@ -44,7 +47,7 @@ export default function ProductDetailContainer() {
   const { data: product, isLoading, error } = productApiAction.useGetProductBySlugQuery(slug);
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(MIN_QTY);
   const [personalizationNote, setPersonalizationNote] = useState('');
 
   const wishlistItems = useSelector((state) => state.wishlist?.items || []);
@@ -127,7 +130,7 @@ export default function ProductDetailContainer() {
   };
 
   const handleOrderOnWhatsApp = () => {
-    const url = generateProductWhatsAppUrl(product, personalizationNote);
+    const url = generateProductWhatsAppUrl(product, personalizationNote, quantity);
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
@@ -376,7 +379,7 @@ export default function ProductDetailContainer() {
             <Box sx={{ mb: 3 }}>
               <PriceTag price={price} comparePrice={comparePrice} size="large" />
               <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 0.5, display: 'block' }}>
-                Inclusive of all taxes & complimentary gift-ready ribbon packaging
+                Per piece • Inclusive of all taxes & complimentary gift-ready ribbon packaging
               </Typography>
             </Box>
 
@@ -409,6 +412,19 @@ export default function ProductDetailContainer() {
             </Box>
 
             {/* Quantity Stepper & Actions */}
+            {!soldOut && (
+              <Typography
+                variant="caption"
+                sx={{
+                  display: 'block',
+                  fontWeight: 600,
+                  color: theme.palette.primary.main,
+                  mb: 1,
+                }}
+              >
+                Minimum order: {MIN_QTY} pieces
+              </Typography>
+            )}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3, flexWrap: 'wrap' }}>
               {!soldOut && (
                 <Box
@@ -422,8 +438,8 @@ export default function ProductDetailContainer() {
                   }}
                 >
                   <IconButton
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    disabled={quantity <= 1}
+                    onClick={() => setQuantity(Math.max(MIN_QTY, quantity - 1))}
+                    disabled={quantity <= MIN_QTY}
                     sx={{ p: 1, color: theme.palette.text.secondary }}
                   >
                     <RemoveRoundedIcon sx={{ fontSize: 18 }} />

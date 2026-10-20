@@ -21,6 +21,7 @@ import EmptyState from '../../common/EmptyState';
 import { cartActions } from './cartSlice';
 import { formatCurrency, generateCartWhatsAppUrl } from '../../utils/helper';
 import { optimizeImage } from '../../utils/imageUrl';
+import { appConstants } from '../../constant/appConstants';
 
 export default function CartContainer() {
   const theme = useTheme();
@@ -134,6 +135,17 @@ export default function CartContainer() {
                       }}
                     >
                       {formatCurrency(item.price)}
+                      <Box
+                        component="span"
+                        sx={{
+                          fontSize: '0.7rem',
+                          fontWeight: 500,
+                          color: theme.palette.text.secondary,
+                          ml: 0.75,
+                        }}
+                      >
+                        each • min. {appConstants.minOrderQty} pcs
+                      </Box>
                     </Typography>
 
                     {item.personalizationNote && (
@@ -174,6 +186,7 @@ export default function CartContainer() {
                         onClick={() =>
                           dispatch(cartActions.updateQuantity({ id: item._id, quantity: item.quantity - 1 }))
                         }
+                        disabled={item.quantity <= appConstants.minOrderQty}
                         sx={{ p: 0.75 }}
                       >
                         <RemoveRoundedIcon sx={{ fontSize: 16 }} />

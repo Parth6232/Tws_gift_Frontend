@@ -7,6 +7,7 @@ import EmptyState from '../../common/EmptyState';
 import Button from '../../common/Button';
 import { wishlistActions } from './wishlistSlice';
 import { cartActions } from '../cart/cartSlice';
+import { appConstants } from '../../constant/appConstants';
 
 export default function WishlistContainer() {
   const theme = useTheme();
@@ -16,7 +17,7 @@ export default function WishlistContainer() {
   const handleMoveAllToCart = () => {
     items.forEach((item) => {
       if (!item.soldOut) {
-        dispatch(cartActions.addToCart({ ...item, quantity: 1 }));
+        dispatch(cartActions.addToCart({ ...item, quantity: appConstants.minOrderQty }));
       }
     });
     dispatch(wishlistActions.clearWishlist());
