@@ -14,6 +14,7 @@ export const appConstants = {
   apiUrl: API_URL,
   apiBaseURL,
   whatsappNumber: import.meta.env.VITE_WHATSAPP_NUMBER || '918109101811',
+  whatsappDefaultMessage: 'Hi TWS Gifts! 🎁 I would like help with personalized / corporate gifting. Please guide me.',
   phoneDisplay: '+91 81091 01811',
   contactEmail: 'twsgiftsqcs@gmail.com',
   locationText: 'Indore, Madhya Pradesh, India',

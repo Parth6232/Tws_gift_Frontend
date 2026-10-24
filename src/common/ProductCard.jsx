@@ -232,6 +232,8 @@ export default function ProductCard({ product, sx = {} }) {
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
+            overflowWrap: 'anywhere',
+            wordBreak: 'break-word',
             transition: 'color 0.15s ease',
             '&:hover': {
               color: theme.palette.primary.main,

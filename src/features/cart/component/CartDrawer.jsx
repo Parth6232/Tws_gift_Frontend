@@ -210,13 +210,35 @@ export default function CartDrawer() {
                       </IconButton>
                     </Box>
 
-                    <IconButton
-                      size="small"
-                      onClick={() => dispatch(cartActions.removeFromCart(item._id))}
-                      sx={{ color: theme.palette.text.secondary, '&:hover': { color: '#D32F2F' } }}
-                    >
-                      <DeleteOutlineRoundedIcon sx={{ fontSize: 18 }} />
-                    </IconButton>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Box sx={{ textAlign: 'right' }}>
+                        <Typography
+                          sx={{
+                            fontFamily: '"Fraunces", serif',
+                            fontWeight: 700,
+                            fontSize: '0.9375rem',
+                            color: theme.palette.text.primary,
+                            lineHeight: 1.1,
+                          }}
+                        >
+                          {formatCurrency(item.price * item.quantity)}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          sx={{ color: theme.palette.text.secondary, fontSize: '0.6875rem' }}
+                        >
+                          {item.quantity} × {formatCurrency(item.price)}
+                        </Typography>
+                      </Box>
+                      <IconButton
+                        size="small"
+                        onClick={() => dispatch(cartActions.removeFromCart(item._id))}
+                        sx={{ color: theme.palette.text.secondary, '&:hover': { color: '#D32F2F' } }}
+                        aria-label="Remove item"
+                      >
+                        <DeleteOutlineRoundedIcon sx={{ fontSize: 18 }} />
+                      </IconButton>
+                    </Box>
                   </Box>
                 </Box>
               </Box>

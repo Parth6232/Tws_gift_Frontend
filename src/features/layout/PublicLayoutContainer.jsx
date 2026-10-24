@@ -684,7 +684,7 @@ export default function PublicLayoutContainer() {
 
               <Box
                 component="a"
-                href={`https://wa.me/${appConstants.whatsappNumber}`}
+                href={`https://wa.me/${appConstants.whatsappNumber}?text=${encodeURIComponent(appConstants.whatsappDefaultMessage)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{

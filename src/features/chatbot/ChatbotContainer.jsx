@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import CardGiftcardRoundedIcon from '@mui/icons-material/CardGiftcardRounded';
 import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { Link, useLocation } from 'react-router-dom';
@@ -22,6 +21,44 @@ import { chatApiAction } from './chatApiSlice';
 import { appConstants } from '../../constant/appConstants';
 import { formatCurrency } from '../../utils/helper';
 import { optimizeImage } from '../../utils/imageUrl';
+
+function AssistantAvatar({ size = 28, isDark }) {
+  return (
+    <Box
+      component="picture"
+      sx={{
+        width: size,
+        height: size,
+        minWidth: size,
+        minHeight: size,
+        borderRadius: '50%',
+        display: 'inline-block',
+        overflow: 'hidden',
+        border: `1px solid ${isDark ? 'rgba(242, 117, 143, 0.4)' : 'rgba(217, 69, 107, 0.3)'}`,
+        flexShrink: 0,
+        backgroundColor: 'transparent',
+      }}
+    >
+      <source srcSet="/assets/assistant-icon.webp" type="image/webp" />
+      <img
+        src="/assets/assistant-icon.png"
+        width={size}
+        height={size}
+        draggable={false}
+        alt="TWS Assistant"
+        decoding="async"
+        style={{
+          width: '100%',
+          height: '100%',
+          borderRadius: '50%',
+          objectFit: 'cover',
+          display: 'block',
+          userSelect: 'none',
+        }}
+      />
+    </Box>
+  );
+}
 
 export default function ChatbotContainer() {
   const theme = useTheme();
@@ -127,8 +164,8 @@ export default function ChatbotContainer() {
       <Box
         sx={{
           position: 'fixed',
-          bottom: { xs: hasStickyBar ? 84 : 24, md: 28 },
-          right: { xs: 20, md: 28 },
+          bottom: { xs: hasStickyBar ? 96 : 24, md: 28 },
+          right: { xs: 16, sm: 20, md: 28 },
           zIndex: 1301,
         }}
       >
@@ -137,31 +174,139 @@ export default function ChatbotContainer() {
           whileTap={{ scale: 0.95 }}
           animate={{ y: [0, -4, 0] }}
           transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
-          <IconButton
-            onClick={() => dispatch(chatActions.toggleChat())}
-            aria-label="Open gift assistant chat"
-            sx={{
-              width: 58,
-              height: 58,
-              borderRadius: '50%',
-              backgroundColor: theme.palette.primary.main,
-              color: '#FFFFFF',
-              boxShadow: isDark
-                ? '0 8px 24px rgba(242, 117, 143, 0.4)'
-                : '0 8px 24px rgba(217, 69, 107, 0.35)',
-              border: `2px solid ${isDark ? '#F2758F' : '#FFFFFF'}`,
-              '&:hover': {
-                backgroundColor: isDark ? '#E55E7A' : '#C4365A',
-              },
-            }}
-          >
+          <AnimatePresence mode="wait" initial={false}>
             {isOpen ? (
-              <CloseRoundedIcon sx={{ fontSize: 26 }} />
+              <motion.div
+                key="chat-close"
+                initial={{ opacity: 0, scale: 0.8, rotate: -45 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                exit={{ opacity: 0, scale: 0.8, rotate: 45 }}
+                transition={{ duration: 0.2 }}
+              >
+                <IconButton
+                  onClick={() => dispatch(chatActions.toggleChat())}
+                  aria-label="Close chat"
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: '50%',
+                    backgroundColor: theme.palette.primary.main,
+                    color: '#FFFFFF',
+                    boxShadow: isDark
+                      ? '0 8px 24px rgba(242, 117, 143, 0.4)'
+                      : '0 8px 24px rgba(217, 69, 107, 0.35)',
+                    border: `2.5px solid ${isDark ? '#F2758F' : '#FFFFFF'}`,
+                    '&:hover': {
+                      backgroundColor: isDark ? '#E55E7A' : '#C4365A',
+                    },
+                  }}
+                >
+                  <CloseRoundedIcon sx={{ fontSize: 26 }} />
+                </IconButton>
+              </motion.div>
             ) : (
-              <CardGiftcardRoundedIcon sx={{ fontSize: 26 }} />
+              <motion.div
+                key="chat-launcher"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.2 }}
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}
+              >
+                <IconButton
+                  onClick={() => dispatch(chatActions.toggleChat())}
+                  aria-label="Open gift assistant chat"
+                  sx={{
+                    width: { xs: hasStickyBar ? 52 : 56, sm: 64 },
+                    height: { xs: hasStickyBar ? 52 : 56, sm: 64 },
+                    p: 0,
+                    borderRadius: '50%',
+                    backgroundColor: 'transparent',
+                    border: `2.5px solid ${isDark ? '#F2758F' : '#FFFFFF'}`,
+                    boxShadow: isDark
+                      ? '0 8px 28px rgba(242, 117, 143, 0.35)'
+                      : '0 8px 24px rgba(217, 69, 107, 0.30)',
+                    position: 'relative',
+                    overflow: 'visible',
+                    '&:hover': {
+                      backgroundColor: 'transparent',
+                    },
+                  }}
+                >
+                  <Box
+                    component="picture"
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: '50%',
+                      display: 'block',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <source srcSet="/assets/assistant-icon.webp" type="image/webp" />
+                    <img
+                      src="/assets/assistant-icon.png"
+                      width="100%"
+                      height="100%"
+                      draggable={false}
+                      alt="TWS Gifts Assistant"
+                      decoding="async"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        display: 'block',
+                        userSelect: 'none',
+                      }}
+                    />
+                  </Box>
+
+                  {/* Online Dot */}
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 1,
+                      right: 1,
+                      width: 10,
+                      height: 10,
+                      borderRadius: '50%',
+                      backgroundColor: '#4CAF50',
+                      border: `2px solid ${theme.palette.background.paper}`,
+                      boxShadow: '0 0 4px rgba(76, 175, 80, 0.6)',
+                      zIndex: 2,
+                    }}
+                  />
+                </IconButton>
+
+                <Typography
+                  sx={{
+                    fontSize: '0.6875rem',
+                    fontWeight: 600,
+                    textAlign: 'center',
+                    lineHeight: 1,
+                    mt: 0.75,
+                    color: theme.palette.text.primary,
+                    px: '10px',
+                    py: '3px',
+                    borderRadius: '999px',
+                    backgroundColor: theme.palette.background.paper,
+                    border: `1px solid ${theme.palette.divider}`,
+                    boxShadow: isDark
+                      ? '0 2px 8px rgba(0,0,0,0.4)'
+                      : '0 2px 8px rgba(74,33,24,0.08)',
+                    pointerEvents: 'none',
+                    userSelect: 'none',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Assistant
+                </Typography>
+              </motion.div>
             )}
-          </IconButton>
+          </AnimatePresence>
         </motion.div>
       </Box>
 
@@ -217,20 +362,36 @@ export default function ChatbotContainer() {
             >
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                 <Box
+                  component="picture"
                   sx={{
-                    width: 38,
-                    height: 38,
+                    width: 42,
+                    height: 42,
+                    minWidth: 42,
+                    minHeight: 42,
                     borderRadius: '50%',
-                    backgroundColor: theme.palette.primary.main,
-                    color: '#fff',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '18px',
+                    border: `1.5px solid ${theme.palette.primary.main}`,
+                    display: 'block',
+                    overflow: 'hidden',
                     flexShrink: 0,
                   }}
                 >
-                  🎁
+                  <source srcSet="/assets/assistant-icon.webp" type="image/webp" />
+                  <img
+                    src="/assets/assistant-icon.png"
+                    width="42"
+                    height="42"
+                    draggable={false}
+                    alt="TWS Gifts Assistant"
+                    decoding="async"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      display: 'block',
+                      userSelect: 'none',
+                    }}
+                  />
                 </Box>
                 <Box>
                   <Typography
@@ -244,18 +405,28 @@ export default function ChatbotContainer() {
                   >
                     TWS Gifts Assistant
                   </Typography>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      color: theme.palette.text.secondary,
-                      display: 'block',
-                      fontSize: '0.75rem',
-                      lineHeight: 1.2,
-                      mt: 0.25,
-                    }}
-                  >
-                    TWS Gifts Gift Stylist
-                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mt: 0.25 }}>
+                    <Box
+                      sx={{
+                        width: 7,
+                        height: 7,
+                        borderRadius: '50%',
+                        backgroundColor: '#4CAF50',
+                        display: 'inline-block',
+                      }}
+                    />
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: theme.palette.text.secondary,
+                        display: 'block',
+                        fontSize: '0.75rem',
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      Online • Answers in seconds
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
 
@@ -306,31 +477,44 @@ export default function ChatbotContainer() {
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: isUser ? 'flex-end' : 'flex-start',
+                      width: '100%',
                     }}
                   >
                     <Box
                       sx={{
-                        maxWidth: '85%',
-                        p: 1.5,
-                        borderRadius: isUser ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-                        backgroundColor: isUser
-                          ? theme.palette.primary.main
-                          : isDark
-                          ? '#2A1B17'
-                          : '#FBF5ED',
-                        color: isUser ? '#FFFFFF' : theme.palette.text.primary,
-                        border: isUser ? 'none' : `1px solid ${theme.palette.divider}`,
-                        fontSize: '0.875rem',
-                        lineHeight: 1.5,
-                        wordBreak: 'break-word',
+                        display: 'flex',
+                        alignItems: 'flex-end',
+                        gap: 1,
+                        maxWidth: '100%',
+                        width: '100%',
+                        justifyContent: isUser ? 'flex-end' : 'flex-start',
                       }}
                     >
-                      {msg.content}
+                      {!isUser && <AssistantAvatar size={28} isDark={isDark} />}
+                      <Box
+                        sx={{
+                          maxWidth: isUser ? '85%' : 'calc(85% - 36px)',
+                          p: 1.5,
+                          borderRadius: isUser ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
+                          backgroundColor: isUser
+                            ? theme.palette.primary.main
+                            : isDark
+                            ? '#2A1B17'
+                            : '#FBF5ED',
+                          color: isUser ? '#FFFFFF' : theme.palette.text.primary,
+                          border: isUser ? 'none' : `1px solid ${theme.palette.divider}`,
+                          fontSize: '0.875rem',
+                          lineHeight: 1.5,
+                          wordBreak: 'break-word',
+                        }}
+                      >
+                        {msg.content}
+                      </Box>
                     </Box>
 
                     {/* Retry button & WhatsApp fallback on error */}
                     {msg.isError && (
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1, flexWrap: 'wrap' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1, ml: isUser ? 0 : '36px', flexWrap: 'wrap' }}>
                         {lastFailedMessage && (
                           <Chip
                             icon={<RefreshRoundedIcon sx={{ fontSize: 14 }} />}
@@ -349,7 +533,7 @@ export default function ChatbotContainer() {
                           <Chip
                             component="a"
                             href={`https://wa.me/${appConstants.whatsappNumber}?text=${encodeURIComponent(
-                              'Hi TWS Gifts! I need help with gift recommendations.'
+                              appConstants.whatsappDefaultMessage || 'Hi TWS Gifts! I need help with gift recommendations.'
                             )}`}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -381,6 +565,7 @@ export default function ChatbotContainer() {
                           display: 'flex',
                           gap: 1.25,
                           mt: 1.25,
+                          ml: isUser ? 0 : '36px',
                           maxWidth: '100%',
                           overflowX: 'auto',
                           py: 0.5,
@@ -470,34 +655,43 @@ export default function ChatbotContainer() {
               {isTyping && (
                 <Box
                   sx={{
-                    alignSelf: 'flex-start',
-                    p: 1.5,
-                    borderRadius: '16px 16px 16px 4px',
-                    backgroundColor: isDark ? '#2A1B17' : '#FBF5ED',
-                    border: `1px solid ${theme.palette.divider}`,
                     display: 'flex',
-                    alignItems: 'center',
-                    gap: 0.5,
+                    alignItems: 'flex-end',
+                    gap: 1,
+                    alignSelf: 'flex-start',
                   }}
                 >
+                  <AssistantAvatar size={28} isDark={isDark} />
                   <Box
-                    component={motion.div}
-                    animate={{ scale: [1, 1.4, 1] }}
-                    transition={{ repeat: Infinity, duration: 0.8 }}
-                    sx={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: theme.palette.primary.main }}
-                  />
-                  <Box
-                    component={motion.div}
-                    animate={{ scale: [1, 1.4, 1] }}
-                    transition={{ repeat: Infinity, duration: 0.8, delay: 0.2 }}
-                    sx={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: theme.palette.primary.main }}
-                  />
-                  <Box
-                    component={motion.div}
-                    animate={{ scale: [1, 1.4, 1] }}
-                    transition={{ repeat: Infinity, duration: 0.8, delay: 0.4 }}
-                    sx={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: theme.palette.primary.main }}
-                  />
+                    sx={{
+                      p: 1.5,
+                      borderRadius: '16px 16px 16px 4px',
+                      backgroundColor: isDark ? '#2A1B17' : '#FBF5ED',
+                      border: `1px solid ${theme.palette.divider}`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 0.5,
+                    }}
+                  >
+                    <Box
+                      component={motion.div}
+                      animate={{ scale: [1, 1.4, 1] }}
+                      transition={{ repeat: Infinity, duration: 0.8 }}
+                      sx={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: theme.palette.primary.main }}
+                    />
+                    <Box
+                      component={motion.div}
+                      animate={{ scale: [1, 1.4, 1] }}
+                      transition={{ repeat: Infinity, duration: 0.8, delay: 0.2 }}
+                      sx={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: theme.palette.primary.main }}
+                    />
+                    <Box
+                      component={motion.div}
+                      animate={{ scale: [1, 1.4, 1] }}
+                      transition={{ repeat: Infinity, duration: 0.8, delay: 0.4 }}
+                      sx={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: theme.palette.primary.main }}
+                    />
+                  </Box>
                 </Box>
               )}
             </Box>

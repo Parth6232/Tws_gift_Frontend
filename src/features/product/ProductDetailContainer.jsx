@@ -48,7 +48,32 @@ export default function ProductDetailContainer() {
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(MIN_QTY);
+  const [qtyInput, setQtyInput] = useState(String(MIN_QTY));
   const [personalizationNote, setPersonalizationNote] = useState('');
+
+  useEffect(() => {
+    setQtyInput(String(quantity));
+  }, [quantity]);
+
+  const handleQtyInputChange = (e) => {
+    const val = e.target.value.replace(/[^0-9]/g, '');
+    setQtyInput(val);
+    const parsed = parseInt(val, 10);
+    if (!isNaN(parsed) && parsed >= MIN_QTY) {
+      setQuantity(parsed);
+    }
+  };
+
+  const handleQtyInputBlur = () => {
+    const parsed = parseInt(qtyInput, 10);
+    if (isNaN(parsed) || parsed < MIN_QTY) {
+      setQuantity(MIN_QTY);
+      setQtyInput(String(MIN_QTY));
+    } else {
+      setQuantity(parsed);
+      setQtyInput(String(parsed));
+    }
+  };
 
   const wishlistItems = useSelector((state) => state.wishlist?.items || []);
   const isWishlisted = wishlistItems.some((item) => item._id === product?._id);
@@ -157,8 +182,8 @@ export default function ProductDetailContainer() {
   };
 
   return (
-    <Box sx={{ py: { xs: 3, md: 6 }, pb: { xs: 12, md: 6 } }}>
-      <Container maxWidth="xl" sx={{ px: { xs: 3, md: 6 } }}>
+    <Box sx={{ py: { xs: 3, md: 6 }, pb: { xs: '96px', md: 6 }, overflowX: 'clip' }}>
+      <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3, md: 6 } }}>
         {/* Breadcrumb */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 4, flexWrap: 'wrap' }}>
           <Typography
@@ -207,30 +232,33 @@ export default function ProductDetailContainer() {
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+            gridTemplateColumns: { xs: 'minmax(0, 1fr)', md: 'repeat(2, minmax(0, 1fr))' },
             gap: { xs: 4, md: 7 },
             mb: 8,
           }}
         >
           {/* Left Column: Image Gallery */}
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
             {/* Primary Main Image with Hover Zoom */}
             <Box
               sx={{
                 width: '100%',
                 aspectRatio: '1 / 1',
+                maxHeight: { xs: 'min(calc(100vw - 32px), 480px)', md: 'none' },
                 borderRadius: '24px',
                 overflow: 'hidden',
                 backgroundColor: '#FFFFFF',
                 border: `1px solid ${theme.palette.divider}`,
                 position: 'relative',
                 boxShadow: theme.shadows[2],
+                mx: 'auto',
               }}
             >
               <Box
                 component="img"
                 src={optimizeImage(currentImage, 800)}
                 srcSet={getSrcSet(currentImage)}
+                sizes="(max-width: 900px) 100vw, 50vw"
                 alt={title}
                 onError={(e) => {
                   if (!e.target.dataset.fallback) {
@@ -243,6 +271,7 @@ export default function ProductDetailContainer() {
                 sx={{
                   width: '100%',
                   height: '100%',
+                  maxWidth: '100%',
                   objectFit: 'contain',
                   transition: 'transform 0.4s ease',
                   '&:hover': {
@@ -298,6 +327,8 @@ export default function ProductDetailContainer() {
                   scrollSnapType: 'x mandatory',
                   scrollbarWidth: 'none',
                   '&::-webkit-scrollbar': { display: 'none' },
+                  minWidth: 0,
+                  maxWidth: '100%',
                 }}
               >
                 {images.map((img, idx) => {
@@ -344,7 +375,7 @@ export default function ProductDetailContainer() {
           </Box>
 
           {/* Right Column: Details & Actions */}
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
             {/* Category */}
             <Typography
               variant="caption"
@@ -365,11 +396,13 @@ export default function ProductDetailContainer() {
               sx={{
                 fontFamily: '"Fraunces", serif',
                 fontWeight: 600,
-                fontSize: { xs: '1.875rem', sm: '2.35rem', md: '2.75rem' },
+                fontSize: { xs: '1.75rem', sm: '2.35rem', md: '2.75rem' },
                 lineHeight: 1.2,
                 color: theme.palette.text.primary,
                 letterSpacing: '-0.02em',
                 mb: 2,
+                overflowWrap: 'anywhere',
+                wordBreak: 'break-word',
               }}
             >
               {title}
@@ -393,6 +426,8 @@ export default function ProductDetailContainer() {
                 lineHeight: 1.7,
                 mb: 3,
                 fontSize: '0.96rem',
+                overflowWrap: 'anywhere',
+                wordBreak: 'break-word',
               }}
             >
               {description}
@@ -413,23 +448,24 @@ export default function ProductDetailContainer() {
 
             {/* Quantity Stepper & Actions */}
             {!soldOut && (
-              <Typography
-                variant="caption"
-                sx={{
-                  display: 'block',
-                  fontWeight: 600,
-                  color: theme.palette.primary.main,
-                  mb: 1,
-                }}
-              >
-                Minimum order: {MIN_QTY} pieces
-              </Typography>
-            )}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3, flexWrap: 'wrap' }}>
-              {!soldOut && (
+              <Box sx={{ mb: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1, flexWrap: 'wrap', gap: 1 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
+                    Quantity
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      fontWeight: 600,
+                      color: theme.palette.primary.main,
+                    }}
+                  >
+                    Minimum order: {MIN_QTY} pieces
+                  </Typography>
+                </Box>
                 <Box
                   sx={{
-                    display: 'flex',
+                    display: 'inline-flex',
                     alignItems: 'center',
                     borderRadius: '12px',
                     border: `1.5px solid ${theme.palette.divider}`,
@@ -438,23 +474,61 @@ export default function ProductDetailContainer() {
                   }}
                 >
                   <IconButton
-                    onClick={() => setQuantity(Math.max(MIN_QTY, quantity - 1))}
+                    onClick={() => setQuantity((q) => Math.max(MIN_QTY, q - 1))}
                     disabled={quantity <= MIN_QTY}
                     sx={{ p: 1, color: theme.palette.text.secondary }}
+                    aria-label="Decrease quantity"
                   >
                     <RemoveRoundedIcon sx={{ fontSize: 18 }} />
                   </IconButton>
-                  <Typography sx={{ px: 2, fontWeight: 700, fontSize: '0.9375rem' }}>
-                    {quantity}
-                  </Typography>
+                  <Box
+                    component="input"
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    value={qtyInput}
+                    onChange={handleQtyInputChange}
+                    onBlur={handleQtyInputBlur}
+                    aria-label="Quantity"
+                    sx={{
+                      width: 56,
+                      textAlign: 'center',
+                      border: 'none',
+                      outline: 'none',
+                      backgroundColor: 'transparent',
+                      fontWeight: 700,
+                      fontSize: '0.9375rem',
+                      color: theme.palette.text.primary,
+                      p: 0,
+                    }}
+                  />
                   <IconButton
-                    onClick={() => setQuantity(quantity + 1)}
+                    onClick={() => setQuantity((q) => q + 1)}
                     sx={{ p: 1, color: theme.palette.text.secondary }}
+                    aria-label="Increase quantity"
                   >
                     <AddRoundedIcon sx={{ fontSize: 18 }} />
                   </IconButton>
                 </Box>
-              )}
+
+                {/* Live total line */}
+                <Box sx={{ mt: 1 }}>
+                  <Typography variant="caption" sx={{ display: 'block', color: theme.palette.text.secondary, fontWeight: 500 }}>
+                    {quantity} pcs × {formatCurrency(price)} ={' '}
+                    <Typography component="span" sx={{ fontWeight: 700, color: theme.palette.primary.main, fontSize: '0.85rem' }}>
+                      {formatCurrency(quantity * price)}
+                    </Typography>
+                  </Typography>
+                  {parseInt(qtyInput, 10) < MIN_QTY && (
+                    <Typography variant="caption" sx={{ display: 'block', color: theme.palette.error.main, mt: 0.25, fontWeight: 600 }}>
+                      Minimum {MIN_QTY} pieces required
+                    </Typography>
+                  )}
+                </Box>
+              </Box>
+            )}
+
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3, flexWrap: 'wrap', width: '100%' }}>
 
               {soldOut ? (
                 <Button
@@ -588,33 +662,89 @@ export default function ProductDetailContainer() {
           zIndex: 999,
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: 2,
+          gap: 1.5,
         }}
       >
-        <Box>
-          <Typography variant="caption" color="text.secondary">
-            Total Price
+        <Box sx={{ minWidth: 0, flexShrink: 1 }}>
+          <Typography
+            variant="caption"
+            sx={{
+              color: theme.palette.text.secondary,
+              fontSize: '0.7rem',
+              display: 'block',
+              lineHeight: 1.2,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Total for {quantity} pcs
           </Typography>
           <Typography
             sx={{
               fontFamily: '"Fraunces", serif',
               fontWeight: 700,
-              fontSize: '1.25rem',
+              fontSize: '1.15rem',
               color: theme.palette.primary.main,
+              lineHeight: 1.2,
             }}
           >
             {formatCurrency(price * quantity)}
           </Typography>
+          <Typography
+            variant="caption"
+            sx={{
+              color: theme.palette.text.secondary,
+              fontSize: '0.6875rem',
+              display: 'block',
+              lineHeight: 1.1,
+            }}
+          >
+            {formatCurrency(price)} / pc
+          </Typography>
         </Box>
 
-        <Box sx={{ display: 'flex', gap: 1 }}>
+        {/* Stepper inside sticky bar */}
+        {!soldOut && (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              borderRadius: '8px',
+              border: `1px solid ${theme.palette.divider}`,
+              backgroundColor: theme.palette.background.paper,
+              flexShrink: 0,
+            }}
+          >
+            <IconButton
+              size="small"
+              onClick={() => setQuantity((q) => Math.max(MIN_QTY, q - 1))}
+              disabled={quantity <= MIN_QTY}
+              sx={{ p: 0.5, color: theme.palette.text.secondary }}
+              aria-label="Decrease quantity"
+            >
+              <RemoveRoundedIcon sx={{ fontSize: 14 }} />
+            </IconButton>
+            <Typography sx={{ px: 1, fontSize: '0.8125rem', fontWeight: 700 }}>
+              {quantity}
+            </Typography>
+            <IconButton
+              size="small"
+              onClick={() => setQuantity((q) => q + 1)}
+              sx={{ p: 0.5, color: theme.palette.text.secondary }}
+              aria-label="Increase quantity"
+            >
+              <AddRoundedIcon sx={{ fontSize: 14 }} />
+            </IconButton>
+          </Box>
+        )}
+
+        <Box sx={{ display: 'flex', gap: 1, flexShrink: 0 }}>
           <Button
             variant="contained"
             size="small"
             onClick={handleAddToCart}
             disabled={soldOut}
             icon={<ShoppingBagOutlinedIcon sx={{ fontSize: 16 }} />}
-            sx={{ minWidth: 120, height: 42 }}
+            sx={{ px: 1.5, height: 40, fontSize: '0.8125rem', whiteSpace: 'nowrap' }}
           >
             {soldOut ? 'Sold Out' : 'Add to Bag'}
           </Button>
@@ -624,7 +754,8 @@ export default function ProductDetailContainer() {
             size="small"
             onClick={handleOrderOnWhatsApp}
             icon={<WhatsAppIcon sx={{ color: '#25D366', fontSize: 18 }} />}
-            sx={{ minWidth: 'auto', px: 1.5, height: 42 }}
+            sx={{ minWidth: 'auto', px: 1.25, height: 40 }}
+            aria-label="Order on WhatsApp"
           />
         </Box>
       </Box>

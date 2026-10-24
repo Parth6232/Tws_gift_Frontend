@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AppRoutes from './router/AppRoutes';
 import { toastActions } from './store/redux/slices/toastSlice';
 import { authApiAction } from './features/auth/authApiSlice';
+import ScrollToTop from './common/ScrollToTop';
 import Loader from './common/Loader';
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
 
   return (
     <Suspense fallback={<Loader loading position="fixed" size="md" message="Wrapping your experience..." />}>
+      <ScrollToTop />
       <AppRoutes />
 
       {/* Global Snackbar Toasts */}

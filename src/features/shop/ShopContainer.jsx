@@ -25,6 +25,7 @@ import EmptyState from '../../common/EmptyState';
 import { ProductCardSkeleton } from '../../common/Skeleton';
 import Button from '../../common/Button';
 import Textfield from '../../common/Textfield';
+import PaginationBar from '../../common/PaginationBar';
 import { productApiAction } from '../product/productApiSlice';
 import { commonApiAction } from '../../store/redux/slices/commonApiSlice';
 import { formatCurrency } from '../../utils/helper';
@@ -49,7 +50,11 @@ export default function ShopContainer() {
 
   const [priceRange, setPriceRange] = useState([minPriceParam, maxPriceParam]);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
-  const [page, setPage] = useState(1);
+
+  // Sync page with URL query
+  const pageParam = parseInt(searchParams.get('page'), 10);
+  const page = !isNaN(pageParam) && pageParam > 0 ? pageParam : 1;
+  const gridTopRef = useRef(null);
 
   // Search input state with debounce
   const [searchInput, setSearchInput] = useState(activeSearch);
@@ -73,20 +78,10 @@ export default function ShopContainer() {
       } else {
         next.delete('search');
       }
+      next.delete('page');
       setSearchParams(next, { replace: true });
     }
   }, [debouncedSearch]);
-
-  // Bug fix: reset local page to 1 whenever search, category, sort or any filter in the URL changes
-  const filterSignature = `${categorySlug || ''}_${searchParams.toString()}`;
-  const prevFilterSigRef = useRef(filterSignature);
-
-  useEffect(() => {
-    if (prevFilterSigRef.current !== filterSignature) {
-      prevFilterSigRef.current = filterSignature;
-      setPage(1);
-    }
-  }, [filterSignature]);
 
   const handleClearSearch = () => {
     setSearchInput('');
@@ -94,6 +89,7 @@ export default function ShopContainer() {
     if (currentUrlSearch) {
       const next = new URLSearchParams(searchParams);
       next.delete('search');
+      next.delete('page');
       setSearchParams(next, { replace: true });
     }
   };
@@ -144,14 +140,29 @@ export default function ShopContainer() {
     } else {
       next.set(key, value.toString());
     }
+    next.delete('page');
     setSearchParams(next);
-    setPage(1);
   };
 
   const clearAllFilters = () => {
     setSearchParams({});
     setPriceRange([0, 10000]);
-    setPage(1);
+  };
+
+  const handlePageChange = (newPage) => {
+    const next = new URLSearchParams(searchParams);
+    if (newPage > 1) {
+      next.set('page', newPage.toString());
+    } else {
+      next.delete('page');
+    }
+    setSearchParams(next);
+
+    // Scroll to top of product grid with sticky header offset
+    if (gridTopRef.current) {
+      const topOffset = gridTopRef.current.getBoundingClientRect().top + window.pageYOffset - 90;
+      window.scrollTo({ top: Math.max(0, topOffset), behavior: 'smooth' });
+    }
   };
 
   const FilterContent = (
@@ -372,7 +383,7 @@ export default function ShopContainer() {
           <Box sx={{ display: { xs: 'none', md: 'block' } }}>{FilterContent}</Box>
 
           {/* Product Grid Area */}
-          <Box>
+          <Box ref={gridTopRef}>
             {/* In-page Search Field */}
             <Box sx={{ mb: 3, position: 'relative' }}>
               <Textfield
@@ -455,29 +466,15 @@ export default function ShopContainer() {
                   ))}
                 </Box>
 
-                {/* Pagination / Load more */}
-                {pages > 1 && (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', mt: 6, gap: 1 }}>
-                    {Array.from({ length: pages }).map((_, idx) => {
-                      const pageNum = idx + 1;
-                      const isCurrent = page === pageNum;
-                      return (
-                        <Button
-                          key={pageNum}
-                          variant={isCurrent ? 'contained' : 'white'}
-                          size="small"
-                          onClick={() => {
-                            setPage(pageNum);
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                          }}
-                          sx={{ minWidth: 40, width: 40, height: 40, p: 0 }}
-                        >
-                          {pageNum}
-                        </Button>
-                      );
-                    })}
-                  </Box>
-                )}
+                {/* Pagination */}
+                <PaginationBar
+                  page={page}
+                  count={pages}
+                  total={total}
+                  limit={12}
+                  onChange={handlePageChange}
+                  disabled={isFetching}
+                />
               </>
             )}
           </Box>

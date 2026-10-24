@@ -240,11 +240,12 @@ export default function LoginContainer() {
           <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
             <Textfield
               label="Staff Email Address"
-              placeholder="admin@twsgifts.com"
+              placeholder="Enter your email address"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="username"
               startIcon={<EmailOutlinedIcon sx={{ color: theme.palette.text.secondary }} />}
             />
 
@@ -255,6 +256,7 @@ export default function LoginContainer() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete="current-password"
               startIcon={<LockOutlinedIcon sx={{ color: theme.palette.text.secondary }} />}
               endIcon={
                 <IconButton

@@ -43,8 +43,8 @@ export default function CartContainer() {
   };
 
   return (
-    <Box sx={{ py: { xs: 4, md: 8 } }}>
-      <Container maxWidth="xl" sx={{ px: { xs: 3, md: 6 } }}>
+    <Box sx={{ py: { xs: 4, md: 8 }, overflowX: 'clip' }}>
+      <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3, md: 6 } }}>
         <SectionHeading
           eyebrow="Review Your Selection"
           title="Your Gifting Bag"
@@ -62,7 +62,7 @@ export default function CartContainer() {
           <Box
             sx={{
               display: 'grid',
-              gridTemplateColumns: { xs: '1fr', lg: '2fr 1.1fr' },
+              gridTemplateColumns: { xs: 'minmax(0, 1fr)', lg: '2fr 1.1fr' },
               gap: { xs: 4, md: 6 },
               alignItems: 'flex-start',
             }}
@@ -205,18 +205,24 @@ export default function CartContainer() {
                       </IconButton>
                     </Box>
 
-                    <Typography
-                      sx={{
-                        fontFamily: '"Fraunces", serif',
-                        fontWeight: 700,
-                        fontSize: '1.125rem',
-                        color: theme.palette.text.primary,
-                        minWidth: 80,
-                        textAlign: 'right',
-                      }}
-                    >
-                      {formatCurrency(item.price * item.quantity)}
-                    </Typography>
+                    <Box sx={{ textAlign: 'right', minWidth: 90 }}>
+                      <Typography
+                        sx={{
+                          fontFamily: '"Fraunces", serif',
+                          fontWeight: 700,
+                          fontSize: '1.125rem',
+                          color: theme.palette.text.primary,
+                        }}
+                      >
+                        {formatCurrency(item.price * item.quantity)}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        sx={{ color: theme.palette.text.secondary, fontSize: '0.72rem', display: 'block' }}
+                      >
+                        {item.quantity} × {formatCurrency(item.price)}
+                      </Typography>
+                    </Box>
 
                     <IconButton
                       onClick={() => dispatch(cartActions.removeFromCart(item._id))}

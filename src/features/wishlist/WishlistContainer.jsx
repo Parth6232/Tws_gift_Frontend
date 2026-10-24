@@ -24,8 +24,8 @@ export default function WishlistContainer() {
   };
 
   return (
-    <Box sx={{ py: { xs: 4, md: 8 } }}>
-      <Container maxWidth="xl" sx={{ px: { xs: 3, md: 6 } }}>
+    <Box sx={{ py: { xs: 4, md: 8 }, overflowX: 'clip' }}>
+      <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3, md: 6 } }}>
         <SectionHeading
           eyebrow="Saved Memories"
           title="Your Wishlist"
@@ -74,10 +74,10 @@ export default function WishlistContainer() {
               sx={{
                 display: 'grid',
                 gridTemplateColumns: {
-                  xs: 'repeat(1, 1fr)',
-                  sm: 'repeat(2, 1fr)',
-                  md: 'repeat(3, 1fr)',
-                  lg: 'repeat(4, 1fr)',
+                  xs: 'repeat(1, minmax(0, 1fr))',
+                  sm: 'repeat(2, minmax(0, 1fr))',
+                  md: 'repeat(3, minmax(0, 1fr))',
+                  lg: 'repeat(4, minmax(0, 1fr))',
                 },
                 gap: 3,
               }}
